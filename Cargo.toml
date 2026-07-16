@@ -1,0 +1,21 @@
+[package]
+name = "ccstatuskit"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "A modular, starship-inspired statusline kit for Claude Code"
+repository = "https://github.com/bigdra50/ccstatuskit"
+license = "MIT OR Apache-2.0"
+keywords = ["claude-code", "statusline", "cli"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+
+[dev-dependencies]
+assert_cmd = "2"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
