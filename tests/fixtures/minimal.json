@@ -1,14 +1,14 @@
 {
-  "cwd": "/home/user/project",
+  "cwd": "/workspace/project",
   "session_id": "abc123",
-  "transcript_path": "/home/user/.claude/projects/x/transcript.jsonl",
+  "transcript_path": "/workspace/.claude/projects/x/transcript.jsonl",
   "version": "2.1.90",
   "model": {
     "id": "claude-opus-4-8",
     "display_name": "Opus"
   },
   "workspace": {
-    "current_dir": "/home/user/project",
-    "project_dir": "/home/user/project"
+    "current_dir": "/workspace/project",
+    "project_dir": "/workspace/project"
   }
 }

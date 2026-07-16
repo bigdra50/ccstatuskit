@@ -1,5 +1,5 @@
 {
-  "cwd": "/home/user/project",
+  "cwd": "/workspace/project",
   "session_id": "abc123",
   "model": {
     "id": "claude-opus-4-8"

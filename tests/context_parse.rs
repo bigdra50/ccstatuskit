@@ -12,14 +12,14 @@ fn fixture(name: &str) -> String {
 fn minimal_fixture_extracts_model_display_name() {
     let ctx = Context::from_stdin_json(fixture("minimal"));
     assert_eq!(ctx.model.unwrap().display_name.as_deref(), Some("Opus"));
-    assert_eq!(ctx.cwd.as_deref(), Some("/home/user/project"));
+    assert_eq!(ctx.cwd.as_deref(), Some("/workspace/project"));
 }
 
 #[test]
 fn full_fixture_parses_all_key_fields() {
     let ctx = Context::from_stdin_json(fixture("full"));
     let ws = ctx.workspace.unwrap();
-    assert_eq!(ws.project_dir.as_deref(), Some("/home/user/project"));
+    assert_eq!(ws.project_dir.as_deref(), Some("/workspace/project"));
     assert_eq!(ws.repo.unwrap().name.as_deref(), Some("ccstatuskit"));
     let cw = ctx.context_window.unwrap();
     assert_eq!(cw.used_percentage, Some(8.25));
@@ -44,7 +44,7 @@ fn drifted_field_types_do_not_poison_the_rest() {
     assert!(ctx.context_window.is_none());
     assert!(ctx.cost.is_none());
     // ...while intact fields still parse.
-    assert_eq!(ctx.cwd.as_deref(), Some("/home/user/project"));
+    assert_eq!(ctx.cwd.as_deref(), Some("/workspace/project"));
     assert_eq!(
         ctx.rate_limits.unwrap().five_hour.unwrap().used_percentage,
         Some(23.5)

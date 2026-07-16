@@ -1,0 +1,43 @@
+//! Binds the engine's `ModuleRunner` to real builtin modules, applying
+//! per-module config overrides (disabled, style).
+
+use crate::config::Config;
+use crate::context::Context;
+use crate::engine::ModuleRunner;
+use crate::format::ModuleRef;
+use crate::modules::BuiltinModule;
+use crate::probes::Probes;
+use crate::segment::Segment;
+use crate::style::parse_style;
+
+pub struct BuiltinRunner {
+    pub context: Context,
+    pub config: Config,
+    pub probes: Box<dyn Probes>,
+}
+
+impl ModuleRunner for BuiltinRunner {
+    fn run(&self, module: &ModuleRef) -> Option<Segment> {
+        match module {
+            ModuleRef::Builtin(name) => {
+                // Unknown module names hide instead of erroring, so a config
+                // written for a newer ccstatuskit degrades gracefully.
+                let builtin = BuiltinModule::from_name(name)?;
+                let overrides = self.config.overrides(builtin);
+                if overrides.disabled {
+                    return None;
+                }
+                let mut segment = builtin.render(&self.context, self.probes.as_ref())?;
+                if let Some(spec) = &overrides.style {
+                    match parse_style(spec, &self.config.palette) {
+                        Ok(style) => segment.style = style,
+                        Err(err) => eprintln!("ccstatuskit: [{name}] {err}"),
+                    }
+                }
+                Some(segment)
+            }
+            // Custom modules land in M6.
+            ModuleRef::Custom(_) => None,
+        }
+    }
+}

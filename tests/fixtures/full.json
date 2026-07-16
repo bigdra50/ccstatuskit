@@ -1,18 +1,18 @@
 {
-  "cwd": "/home/user/project/src",
+  "cwd": "/workspace/project/src",
   "session_id": "abc123",
   "session_name": "my-session",
   "prompt_id": "550e8400-e29b-41d4-a716-446655440000",
-  "transcript_path": "/home/user/.claude/projects/x/transcript.jsonl",
+  "transcript_path": "/workspace/.claude/projects/x/transcript.jsonl",
   "version": "2.1.196",
   "model": {
     "id": "claude-opus-4-8",
     "display_name": "Opus"
   },
   "workspace": {
-    "current_dir": "/home/user/project/src",
-    "project_dir": "/home/user/project",
-    "added_dirs": ["/home/user/lib"],
+    "current_dir": "/workspace/project/src",
+    "project_dir": "/workspace/project",
+    "added_dirs": ["/workspace/lib"],
     "git_worktree": "feature-xyz",
     "repo": {
       "host": "github.com",
@@ -73,9 +73,9 @@
   },
   "worktree": {
     "name": "my-feature",
-    "path": "/home/user/project/.claude/worktrees/my-feature",
+    "path": "/workspace/project/.claude/worktrees/my-feature",
     "branch": "worktree-my-feature",
-    "original_cwd": "/home/user/project",
+    "original_cwd": "/workspace/project",
     "original_branch": "main"
   }
 }
