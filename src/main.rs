@@ -9,6 +9,11 @@ use std::sync::Arc;
 use std::time::Duration;
 
 fn main() {
+    if std::env::args().nth(1).as_deref() == Some("--refresh-usage") {
+        ccstatuskit::refresh::run();
+        return;
+    }
+
     // A statusline must never break Claude Code's UI: consume stdin,
     // render what we can, and always exit 0.
     let mut input = String::new();

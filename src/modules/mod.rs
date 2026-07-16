@@ -10,7 +10,9 @@ mod memory;
 mod model;
 mod project;
 mod time;
+mod usage;
 
+use crate::config::Config;
 use crate::context::Context;
 use crate::probes::Probes;
 use crate::segment::Segment;
@@ -42,7 +44,18 @@ impl BuiltinModule {
         })
     }
 
+    /// Renders with a default config. Only `usage` reads module-specific
+    /// config; use [`BuiltinModule::render_with`] when it matters.
     pub fn render(self, context: &Context, probes: &dyn Probes) -> Option<Segment> {
+        self.render_with(context, &Config::default(), probes)
+    }
+
+    pub fn render_with(
+        self,
+        context: &Context,
+        config: &Config,
+        probes: &dyn Probes,
+    ) -> Option<Segment> {
         match self {
             Self::Model => model::render(context, probes),
             Self::Directory => directory::render(context, probes),
@@ -51,8 +64,7 @@ impl BuiltinModule {
             Self::Ctx => ctx::render(context, probes),
             Self::Time => time::render(context, probes),
             Self::Project => project::render(context, probes),
-            // Implemented in M7; hidden until then.
-            Self::Usage => None,
+            Self::Usage => usage::render(context, config, probes),
         }
     }
 }

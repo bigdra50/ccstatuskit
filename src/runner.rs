@@ -23,12 +23,13 @@ impl ModuleRunner for BuiltinRunner {
                 // Unknown module names hide instead of erroring, so a config
                 // written for a newer ccstatuskit degrades gracefully.
                 let builtin = BuiltinModule::from_name(name)?;
-                let overrides = self.config.overrides(builtin);
-                if overrides.disabled {
+                let (disabled, style_spec) = self.config.module_basics(builtin);
+                if disabled {
                     return None;
                 }
-                let mut segment = builtin.render(&self.context, self.probes.as_ref())?;
-                if let Some(spec) = &overrides.style {
+                let mut segment =
+                    builtin.render_with(&self.context, &self.config, self.probes.as_ref())?;
+                if let Some(spec) = style_spec {
                     match parse_style(spec, &self.config.palette) {
                         Ok(style) => segment.style = style,
                         Err(err) => eprintln!("ccstatuskit: [{name}] {err}"),
