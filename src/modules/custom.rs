@@ -72,8 +72,7 @@ pub fn render(
             }
             Ok(None) => {
                 if Instant::now() >= deadline {
-                    let _ = child.kill();
-                    let _ = child.wait();
+                    kill_tree(&mut child);
                     return None;
                 }
                 std::thread::sleep(Duration::from_millis(2));
@@ -81,6 +80,23 @@ pub fn render(
             Err(_) => return None,
         }
     }
+}
+
+/// Kills the timed-out command. On Windows, `Child::kill` terminates only
+/// the shell — grandchildren survive and can hold inherited pipe handles
+/// open (observed as multi-second statusline stalls), so take down the
+/// whole process tree.
+fn kill_tree(child: &mut std::process::Child) {
+    #[cfg(windows)]
+    {
+        let _ = Command::new("taskkill")
+            .args(["/T", "/F", "/PID", &child.id().to_string()])
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .status();
+    }
+    let _ = child.kill();
+    let _ = child.wait();
 }
 
 fn when_dir_matches(cfg: &CustomModuleConfig, context: &Context) -> bool {
