@@ -9,6 +9,13 @@ use std::sync::Arc;
 use std::time::Duration;
 
 fn main() {
+    // On Windows, the std handles we inherited (Claude Code's statusline
+    // pipe) are themselves inheritable; any child we spawn — and its
+    // descendants — would receive them and could hold the pipe open long
+    // after we exit, stalling the statusline. Clear the inherit flag first.
+    #[cfg(windows)]
+    make_std_handles_uninheritable();
+
     if std::env::args().nth(1).as_deref() == Some("--refresh-usage") {
         ccstatuskit::refresh::run();
         return;
@@ -41,5 +48,24 @@ fn main() {
     for line in render_rows(&rows, runner, &options) {
         let _ = stdout.write_all(line.as_bytes());
         let _ = stdout.write_all(b"\n");
+    }
+}
+
+#[cfg(windows)]
+fn make_std_handles_uninheritable() {
+    use windows_sys::Win32::Foundation::{
+        HANDLE_FLAG_INHERIT, INVALID_HANDLE_VALUE, SetHandleInformation,
+    };
+    use windows_sys::Win32::System::Console::{
+        GetStdHandle, STD_ERROR_HANDLE, STD_INPUT_HANDLE, STD_OUTPUT_HANDLE,
+    };
+    for kind in [STD_INPUT_HANDLE, STD_OUTPUT_HANDLE, STD_ERROR_HANDLE] {
+        // SAFETY: GetStdHandle/SetHandleInformation on our own std handles.
+        unsafe {
+            let handle = GetStdHandle(kind);
+            if !handle.is_null() && handle != INVALID_HANDLE_VALUE {
+                SetHandleInformation(handle, HANDLE_FLAG_INHERIT, 0);
+            }
+        }
     }
 }

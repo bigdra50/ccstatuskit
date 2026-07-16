@@ -23,7 +23,11 @@ toml = "0.8"
 ureq = { version = "2", optional = true }
 
 [target.'cfg(windows)'.dependencies]
-windows-sys = { version = "0.59", features = ["Win32_System_SystemInformation"] }
+windows-sys = { version = "0.59", features = [
+    "Win32_Foundation",
+    "Win32_System_Console",
+    "Win32_System_SystemInformation",
+] }
 
 [dev-dependencies]
 assert_cmd = "2"
