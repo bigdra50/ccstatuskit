@@ -38,6 +38,7 @@ dependencies = [
 name = "ccstatuskit"
 version = "0.1.0"
 dependencies = [
+ "anstyle",
  "assert_cmd",
  "serde",
  "serde_json",
