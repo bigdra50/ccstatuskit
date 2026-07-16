@@ -1,0 +1,17 @@
+{
+  "cwd": "/home/user/project",
+  "session_id": "abc123",
+  "model": {
+    "id": "claude-opus-4-8"
+  },
+  "context_window": "schema drifted: this used to be an object",
+  "cost": {
+    "total_cost_usd": "not a number anymore"
+  },
+  "rate_limits": {
+    "five_hour": {
+      "used_percentage": 23.5,
+      "resets_at": 1738425600
+    }
+  }
+}

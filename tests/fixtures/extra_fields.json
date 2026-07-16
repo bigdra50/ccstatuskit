@@ -1,0 +1,18 @@
+{
+  "cwd": "/home/user/project",
+  "session_id": "abc123",
+  "model": {
+    "id": "claude-opus-4-8",
+    "display_name": "Opus",
+    "some_future_field": {"nested": true}
+  },
+  "brand_new_top_level_field": [1, 2, 3],
+  "another_unknown": "value",
+  "context_window": {
+    "total_input_tokens": 100,
+    "total_output_tokens": 50,
+    "context_window_size": 200000,
+    "used_percentage": 1,
+    "future_metric": "x"
+  }
+}
