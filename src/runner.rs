@@ -36,8 +36,12 @@ impl ModuleRunner for BuiltinRunner {
                 }
                 Some(segment)
             }
-            // Custom modules land in M6.
-            ModuleRef::Custom(_) => None,
+            ModuleRef::Custom(name) => {
+                let cfg = self.config.custom.get(name)?;
+                let timeout =
+                    std::time::Duration::from_millis(self.config.command_timeout.unwrap_or(250));
+                crate::modules::custom::render(cfg, &self.context, &self.config.palette, timeout)
+            }
         }
     }
 }

@@ -3,6 +3,7 @@
 //! hides the module rather than erroring (fail-soft).
 
 mod ctx;
+pub mod custom;
 mod directory;
 mod git;
 mod memory;
