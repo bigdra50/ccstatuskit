@@ -12,7 +12,7 @@ pub enum Token {
     Module(ModuleRef),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum ModuleRef {
     Builtin(String),
     Custom(String),
