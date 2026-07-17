@@ -53,6 +53,8 @@ cargo install ccstatuskit          # または GitHub Releases のバイナリ�
 }
 ```
 
+設定の全リファレンスは [docs/configuration.ja.md](docs/configuration.ja.md)、自作モジュールの書き方は [docs/module-contract.ja.md](docs/module-contract.ja.md) を参照。
+
 ## builtin モジュール
 
 | モジュール | 表示内容 | データ源 |

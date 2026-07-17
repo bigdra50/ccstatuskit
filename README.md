@@ -46,6 +46,8 @@ Then point Claude Code at it in `~/.claude/settings.json`:
 }
 ```
 
+See [docs/configuration.md](docs/configuration.md) for the full configuration reference, and [docs/module-contract.md](docs/module-contract.md) for writing your own modules.
+
 ## Builtin modules
 
 | Module | Shows | Source |

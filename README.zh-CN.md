@@ -53,6 +53,8 @@ cargo install ccstatuskit          # 或从 GitHub Releases 获取二进制文�
 }
 ```
 
+完整配置说明见 [docs/configuration.zh-CN.md](docs/configuration.zh-CN.md)，编写自定义模块见 [docs/module-contract.zh-CN.md](docs/module-contract.zh-CN.md)。
+
 ## 内置模块
 
 | 模块 | 显示内容 | 数据来源 |

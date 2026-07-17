@@ -9,6 +9,13 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate documentation translations
+        run: bash scripts/validate-docs.sh
+
   test:
     strategy:
       fail-fast: false

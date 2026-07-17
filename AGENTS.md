@@ -44,6 +44,9 @@ Plain cargo works too: `cargo test`, `cargo clippy --all-targets -- -D warnings`
   same change: `README.ja.md`, `README.zh-CN.md`, `docs/*.ja.md`,
   `docs/*.zh-CN.md`. Keep section structure 1:1 across languages.
 - New documents get all three languages plus the language-switcher line at the top.
+- `scripts/validate-docs.sh` enforces structural parity (missing translations,
+  heading/code-block counts, switcher lines). Run it after any doc change;
+  CI runs it as a required job.
 
 ## Commits
 
