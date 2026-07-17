@@ -11,7 +11,7 @@
 TOML テンプレートでレイアウトを宣言し、builtin モジュールと任意の外部コマンドを組み合わせる。
 Rust 製の単一バイナリで、ランタイム依存はない。
 
-![Rust リポジトリと Unity プロジェクトでの3行 statusline の描画例](assets/statusline.png)
+![Rust リポジトリと Unity プロジェクトでの3行 statusline の描画例](https://raw.githubusercontent.com/bigdra50/ccstatuskit/main/assets/statusline.png)
 
 ```toml
 # ~/.config/ccstatuskit/config.toml
