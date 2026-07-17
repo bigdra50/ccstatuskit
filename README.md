@@ -6,6 +6,8 @@ A modular, starship-inspired statusline kit for [Claude Code](https://code.claud
 
 Compose your statusline from builtin modules and external commands, laid out with a TOML template. One Rust binary, no runtime dependencies.
 
+![ccstatuskit rendering a three-row statusline in a Rust repo and in a Unity project](assets/statusline.png)
+
 ```toml
 # ~/.config/ccstatuskit/config.toml
 format = """

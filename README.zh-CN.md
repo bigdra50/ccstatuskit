@@ -6,6 +6,8 @@
 用 TOML 模板声明布局，将内置模块与任意外部命令自由组合。
 Rust 编写的单一二进制文件，无运行时依赖。
 
+![在 Rust 仓库与 Unity 项目中渲染的三行 statusline 示例](assets/statusline.png)
+
 ```toml
 # ~/.config/ccstatuskit/config.toml
 format = """
