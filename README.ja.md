@@ -1,5 +1,10 @@
 # ccstatuskit
 
+[![CI](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml/badge.svg)](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml)
+[![crates.io](https://img.shields.io/crates/v/ccstatuskit.svg)](https://crates.io/crates/ccstatuskit)
+[![license](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
+[![MSRV](https://img.shields.io/badge/MSRV-1.85-orange.svg)](Cargo.toml)
+
 [English](README.md) | 日本語 | [简体中文](README.zh-CN.md)
 
 [Claude Code](https://code.claude.com) の statusline を部品から組み立てる、starship 方式のモジュラーキット。

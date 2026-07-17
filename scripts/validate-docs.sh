@@ -49,10 +49,10 @@ for en in "${english_docs[@]}"; do
     # Every file in the trio must carry the switcher naming all languages.
     for f in "$en" "$base.ja.md" "$base.zh-CN.md"; do
         [ -f "$f" ] || continue
-        if ! head -5 "$f" | grep -q "English" ||
-            ! head -5 "$f" | grep -q "日本語" ||
-            ! head -5 "$f" | grep -q "简体中文"; then
-            echo "SWITCHER MISSING: $f lacks the language-switcher line in its first 5 lines"
+        if ! head -10 "$f" | grep -q "English" ||
+            ! head -10 "$f" | grep -q "日本語" ||
+            ! head -10 "$f" | grep -q "简体中文"; then
+            echo "SWITCHER MISSING: $f lacks the language-switcher line in its first 10 lines"
             fail=1
         fi
     done

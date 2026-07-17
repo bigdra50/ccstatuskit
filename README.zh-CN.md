@@ -1,5 +1,10 @@
 # ccstatuskit
 
+[![CI](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml/badge.svg)](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml)
+[![crates.io](https://img.shields.io/crates/v/ccstatuskit.svg)](https://crates.io/crates/ccstatuskit)
+[![license](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
+[![MSRV](https://img.shields.io/badge/MSRV-1.85-orange.svg)](Cargo.toml)
+
 [English](README.md) | [日本語](README.ja.md) | 简体中文
 
 为 [Claude Code](https://code.claude.com) 打造的模块化 statusline 工具箱，设计取法 starship。
