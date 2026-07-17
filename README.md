@@ -1,5 +1,7 @@
 # ccstatuskit
 
+English | [日本語](README.ja.md)
+
 A modular, starship-inspired statusline kit for [Claude Code](https://code.claude.com).
 
 Compose your statusline from builtin modules and external commands, laid out with a TOML template. One Rust binary, no runtime dependencies.
