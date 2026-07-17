@@ -88,7 +88,7 @@ scoped = true
 
 ## 环境要求
 
-- 默认图标需要 [Nerd Font](https://www.nerdfonts.com/)（按模块替换图标将在后续版本支持）
+- 默认图标需要 [Nerd Font](https://www.nerdfonts.com/) **v3**。没有它也不会出问题：图标退化为占位方块（□），而所有信息（模型名、路径、百分比、分支名）仍以文本形式可读。✓ ✎ ⚠ 等状态符号是标准 Unicode，任何现代字体都能显示
 - Windows 开箱即用；`[custom.x]` 模块默认使用 `cmd /C`，装有 Git Bash 时可指定 `shell = ["sh", "-c"]`
 
 ## 许可证

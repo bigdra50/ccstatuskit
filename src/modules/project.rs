@@ -11,7 +11,7 @@ use std::path::Path;
 
 const UNITY: &str = "\u{e721}";
 const REACT: &str = "\u{e7ba}";
-const VUE: &str = "\u{fd42}";
+const VUE: &str = "\u{f0844}"; // nf-md-vuejs (v2's U+FD42 range was removed in Nerd Fonts v3)
 const NEXTJS: &str = "\u{f0e01}";
 const TYPESCRIPT: &str = "\u{e628}";
 const NODE: &str = "\u{e719}";

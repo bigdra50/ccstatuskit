@@ -76,7 +76,7 @@ it also shows per-model weekly quotas (e.g. Fable) from the same unofficial endp
 
 ## Requirements
 
-- A [Nerd Font](https://www.nerdfonts.com/) for the default icons (configurable per module in a future release)
+- A [Nerd Font](https://www.nerdfonts.com/) **v3** for the default icons. Without one, nothing breaks: icons degrade to replacement boxes while every piece of information stays readable as text (model name, path, percentages, branch). State marks like ✓ ✎ ⚠ are standard Unicode and render with any modern font.
 - Windows: works out of the box; `[custom.x]` modules default to `cmd /C` there — set `shell = ["sh", "-c"]` if you have Git Bash
 
 ## License
