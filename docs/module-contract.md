@@ -74,3 +74,17 @@ number=$(jq -r '.pr.number // empty' 2>/dev/null)   # reads stdin
 ```
 
 Any language works the same way: read stdin or `CCSK_*`, print one line.
+
+## Testing your module
+
+Run your command through the built-in harness to see exactly what a
+render would do with it:
+
+```sh
+ccstatuskit test-module './my-module.sh'
+```
+
+It executes two scenarios (a full context and an empty context) with the
+JSON on stdin and the `CCSK_*` env set, then reports the resulting
+segment (or why it hid), the timing against the render budget, and any
+stderr — which a real render discards.

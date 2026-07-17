@@ -30,6 +30,30 @@ pub enum BuiltinModule {
 }
 
 impl BuiltinModule {
+    pub const ALL: [BuiltinModule; 8] = [
+        Self::Model,
+        Self::Directory,
+        Self::Git,
+        Self::Memory,
+        Self::Ctx,
+        Self::Time,
+        Self::Project,
+        Self::Usage,
+    ];
+
+    pub fn name(self) -> &'static str {
+        match self {
+            Self::Model => "model",
+            Self::Directory => "directory",
+            Self::Git => "git",
+            Self::Memory => "memory",
+            Self::Ctx => "ctx",
+            Self::Time => "time",
+            Self::Project => "project",
+            Self::Usage => "usage",
+        }
+    }
+
     pub fn from_name(name: &str) -> Option<Self> {
         Some(match name {
             "model" => Self::Model,

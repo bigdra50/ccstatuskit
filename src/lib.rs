@@ -1,8 +1,10 @@
 pub mod auth;
 pub mod config;
 pub mod context;
+pub mod doctor;
 pub mod engine;
 pub mod format;
+pub mod harness;
 pub mod modules;
 pub mod probes;
 pub mod refresh;

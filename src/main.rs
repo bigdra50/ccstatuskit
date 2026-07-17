@@ -29,6 +29,19 @@ fn main() {
             print_help();
             return;
         }
+        Some("doctor") => {
+            let report = ccstatuskit::doctor::run();
+            print!("{}", report.text);
+            std::process::exit(if report.errors > 0 { 1 } else { 0 });
+        }
+        Some("test-module") => {
+            let command = std::env::args().skip(2).collect::<Vec<_>>().join(" ");
+            if command.trim().is_empty() {
+                eprintln!("usage: ccstatuskit test-module '<command>'");
+                std::process::exit(2);
+            }
+            std::process::exit(ccstatuskit::harness::run(&command));
+        }
         _ => {}
     }
 
@@ -96,10 +109,12 @@ Reads Claude Code's statusline JSON on stdin and prints styled rows.
 Configure in ~/.config/ccstatuskit/config.toml (or $CCSTATUSKIT_CONFIG).
 
 USAGE:
-    ccstatuskit                  render the statusline (JSON on stdin)
-    ccstatuskit --version | -V   print the version
-    ccstatuskit --help | -h      print this help
-    ccstatuskit --refresh-usage  refresh the scoped-usage cache (internal)
+    ccstatuskit                        render the statusline (JSON on stdin)
+    ccstatuskit doctor                 diagnose config problems the render hides
+    ccstatuskit test-module '<cmd>'    exercise a command against the module contract
+    ccstatuskit --version | -V         print the version
+    ccstatuskit --help | -h            print this help
+    ccstatuskit --refresh-usage        refresh the scoped-usage cache (internal)
 
 Docs: https://github.com/bigdra50/ccstatuskit",
         env!("CARGO_PKG_VERSION")

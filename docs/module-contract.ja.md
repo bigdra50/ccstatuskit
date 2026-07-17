@@ -70,3 +70,15 @@ number=$(jq -r '.pr.number // empty' 2>/dev/null)   # stdin を読む
 ```
 
 どの言語でも書き方は同じで、stdin か `CCSK_*` を読み、1行出力する。
+
+## モジュールのテスト
+
+組み込みハーネスにコマンドを通すと、描画時の挙動をそのまま確認できる。
+
+```sh
+ccstatuskit test-module './my-module.sh'
+```
+
+full context と empty context の2シナリオを、stdin の JSON と `CCSK_*`
+環境変数付きで実行し、セグメント（または非表示になった理由）、
+描画バジェットに対する所要時間、そして実描画では捨てられる stderr を報告する。

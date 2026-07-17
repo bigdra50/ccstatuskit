@@ -70,3 +70,15 @@ number=$(jq -r '.pr.number // empty' 2>/dev/null)   # 读取 stdin
 ```
 
 任何语言的写法都相同：读取 stdin 或 `CCSK_*`，输出一行。
+
+## 测试你的模块
+
+把命令交给内置 harness，就能看到渲染时的确切行为：
+
+```sh
+ccstatuskit test-module './my-module.sh'
+```
+
+它以 full context 与 empty context 两个场景执行，stdin 提供 JSON 并设置
+`CCSK_*` 环境变量，然后报告得到的 segment（或隐藏的原因）、
+相对渲染预算的耗时，以及真实渲染会丢弃的 stderr。

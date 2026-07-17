@@ -130,6 +130,20 @@ command_timeout = 250    # wall-clock budget in ms shared by all modules
 
 Set the `NO_COLOR` environment variable to strip all styling.
 
+## Diagnosing problems
+
+The render path hides mistakes by design. When something doesn't show
+up, ask the doctor:
+
+```sh
+ccstatuskit doctor
+```
+
+It reports the resolved config path, TOML and format-template errors,
+invalid styles and palette entries, unknown module names, custom
+references without tables, and the scoped-usage credential/cache state.
+Errors exit 1; warnings (things that merely hide) exit 0.
+
 ## Behavior on errors
 
 | Event | Result |

@@ -125,6 +125,19 @@ command_timeout = 250    # 所有模块共享的实时间预算（毫秒）
 
 设置环境变量 `NO_COLOR` 可去掉全部样式。
 
+## 诊断问题
+
+渲染路径按设计隐藏错误。
+当某些内容不显示时，去问 doctor：
+
+```sh
+ccstatuskit doctor
+```
+
+它报告解析出的配置路径、TOML 与 format 模板错误、非法的 style 与 palette 条目、
+未知模块名、缺少表的 custom 引用，以及 scoped usage 的凭据与缓存状态。
+错误以 exit 1 退出；警告（只是被隐藏的内容）以 exit 0 退出。
+
 ## 出错时的行为
 
 | 事件 | 结果 |

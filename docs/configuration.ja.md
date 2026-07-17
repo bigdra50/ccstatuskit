@@ -128,6 +128,19 @@ command_timeout = 250    # 全モジュール共通の実時間予算（ms）
 
 環境変数 `NO_COLOR` を設定するとすべての装飾が消える。
 
+## 問題の診断
+
+描画パスは設計として設定ミスを隠す。
+何かが表示されないときは doctor に聞く。
+
+```sh
+ccstatuskit doctor
+```
+
+解決された config パス、TOML と format テンプレートのエラー、不正な style と palette、
+未知のモジュール名、テーブルのない custom 参照、scoped usage の認証情報とキャッシュ状態を報告する。
+エラーは exit 1、警告（単に非表示になるだけのもの）は exit 0 になる。
+
 ## エラー時の挙動
 
 | 事象 | 結果 |

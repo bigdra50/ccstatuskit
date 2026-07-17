@@ -82,7 +82,7 @@ pub struct CustomModuleConfig {
 
 impl Config {
     pub fn load() -> Config {
-        let Some(path) = config_path() else {
+        let Some(path) = resolved_config_path() else {
             return Config::default();
         };
         let Ok(body) = std::fs::read_to_string(&path) else {
@@ -129,7 +129,7 @@ pub fn default_cache_dir() -> Option<PathBuf> {
     Some(cache_home.join("ccstatuskit"))
 }
 
-fn config_path() -> Option<PathBuf> {
+pub fn resolved_config_path() -> Option<PathBuf> {
     if let Some(explicit) = std::env::var_os("CCSTATUSKIT_CONFIG") {
         return Some(PathBuf::from(explicit));
     }

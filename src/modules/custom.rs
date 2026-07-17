@@ -86,7 +86,7 @@ pub fn render(
 /// the shell — grandchildren survive and can hold inherited pipe handles
 /// open (observed as multi-second statusline stalls), so take down the
 /// whole process tree.
-fn kill_tree(child: &mut std::process::Child) {
+pub(crate) fn kill_tree(child: &mut std::process::Child) {
     #[cfg(windows)]
     {
         let _ = Command::new("taskkill")
@@ -115,7 +115,7 @@ fn when_dir_matches(cfg: &CustomModuleConfig, context: &Context) -> bool {
     cfg.when_dir.iter().any(|entry| base.join(entry).exists())
 }
 
-fn default_shell() -> Vec<String> {
+pub(crate) fn default_shell() -> Vec<String> {
     if cfg!(windows) {
         vec!["cmd".to_string(), "/C".to_string()]
     } else {
@@ -123,7 +123,7 @@ fn default_shell() -> Vec<String> {
     }
 }
 
-fn contract_env(context: &Context) -> Vec<(&'static str, String)> {
+pub(crate) fn contract_env(context: &Context) -> Vec<(&'static str, String)> {
     let workspace = context.workspace.as_ref();
     let pairs = [
         (
