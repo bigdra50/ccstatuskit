@@ -1,6 +1,6 @@
 # ccstatuskit
 
-[English](README.md) | 日本語
+[English](README.md) | 日本語 | [简体中文](README.zh-CN.md)
 
 [Claude Code](https://code.claude.com) の statusline を部品から組み立てる、starship 方式のモジュラーキット。
 TOML テンプレートでレイアウトを宣言し、builtin モジュールと任意の外部コマンドを組み合わせる。
