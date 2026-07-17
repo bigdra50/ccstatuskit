@@ -16,8 +16,26 @@ fn main() {
     #[cfg(windows)]
     make_std_handles_uninheritable();
 
-    if std::env::args().nth(1).as_deref() == Some("--refresh-usage") {
-        ccstatuskit::refresh::run();
+    match std::env::args().nth(1).as_deref() {
+        Some("--refresh-usage") => {
+            ccstatuskit::refresh::run();
+            return;
+        }
+        Some("--version" | "-V") => {
+            println!("ccstatuskit {}", env!("CARGO_PKG_VERSION"));
+            return;
+        }
+        Some("--help" | "-h") => {
+            print_help();
+            return;
+        }
+        _ => {}
+    }
+
+    // Invoked interactively by a human, not by Claude Code: don't sit
+    // waiting on stdin, explain ourselves instead.
+    if std::io::IsTerminal::is_terminal(&std::io::stdin()) {
+        print_help();
         return;
     }
 
@@ -68,4 +86,22 @@ fn make_std_handles_uninheritable() {
             }
         }
     }
+}
+
+fn print_help() {
+    println!(
+        "ccstatuskit {} — a modular statusline kit for Claude Code
+
+Reads Claude Code's statusline JSON on stdin and prints styled rows.
+Configure in ~/.config/ccstatuskit/config.toml (or $CCSTATUSKIT_CONFIG).
+
+USAGE:
+    ccstatuskit                  render the statusline (JSON on stdin)
+    ccstatuskit --version | -V   print the version
+    ccstatuskit --help | -h      print this help
+    ccstatuskit --refresh-usage  refresh the scoped-usage cache (internal)
+
+Docs: https://github.com/bigdra50/ccstatuskit",
+        env!("CARGO_PKG_VERSION")
+    );
 }
