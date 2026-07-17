@@ -1,5 +1,7 @@
 # External Module Contract (v1)
 
+English | [日本語](module-contract.ja.md) | [简体中文](module-contract.zh-CN.md)
+
 A ccstatuskit module is any executable. Declare it under `[custom.<name>]`
 and place `${custom.<name>}` in your `format` template.
 
