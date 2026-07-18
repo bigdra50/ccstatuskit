@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; padding: 0; background: #1e1f1c; }
+  .window {
+    width: {{WIDTH}}px;
+    font-family: "JetBrains Mono", "Material Design Icons", "codicon",
+                 "Font Awesome 6 Free Solid", "FontAwesome", "PowerlineSymbols",
+                 monospace;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .titlebar {
+    background: #3a3d3e;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .titletext {
+    color: #cfcfcf;
+    font-size: 13px;
+    margin-left: 8px;
+    font-family: -apple-system, sans-serif;
+  }
+  .term {
+    background: #272822;
+    color: #f8f8f2;
+    padding: 22px 26px;
+    font-size: 20px;
+    line-height: 1.9;
+    white-space: pre;
+  }
+  .tmuxbar {
+    background: #1b3b1e;
+    color: #a6e22e;
+    font-size: 14px;
+    padding: 5px 14px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .tmuxbar .win {
+    background: #a6e22e;
+    color: #1b3b1e;
+    padding: 1px 8px;
+    border-radius: 2px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <div class="titletext">{{TITLE}}</div>
+    </div>
+    <div class="term">{{BODY}}</div>
+    <div class="tmuxbar">
+      <div><span class="win">{{TMUX_WINDOW}}</span></div>
+      <div>{{TMUX_STATUS_RIGHT}}</div>
+    </div>
+  </div>
+</body>
+</html>
