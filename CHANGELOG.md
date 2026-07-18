@@ -4,6 +4,29 @@ All notable changes to this project are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- Five new builtin modules surfacing previously-unused stdin fields: `cost`
+  (session spend in USD), `lines` (session lines added/removed), `agent`
+  (active subagent name), `pr` (open PR number + review state), `worktree`
+  (name/branch when not the primary checkout)
+- `git` now distinguishes conflicts (⚠, escalates to red), renamed (»)
+  and worktree-deleted (✘) files, and shows a stash count (⚑N)
+
+### Changed
+
+- **Breaking:** the `project` module is replaced by eleven independent
+  per-language modules — `unity`, `node`, `rust`, `go`, `python`, `dotnet`,
+  `ruby`, `java`, `kotlin`, `php`, `swift` — each with its own `disabled`/
+  `style` config and detected independently, so a repo can show more than
+  one (e.g. `$rust` and `$node` together). `dotnet` hides inside a Unity
+  project, which generates its own `.csproj` files
+- `DEFAULT_FORMAT` gained a row for the split-out language modules and
+  folded the new stdin-field modules into the `$usage` row; both collapse
+  away when every module in them hides, same as any other row
+
 ## [0.2.0] - 2026-07-18
 
 ### Added

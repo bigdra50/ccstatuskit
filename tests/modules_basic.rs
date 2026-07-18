@@ -147,6 +147,108 @@ fn time_omits_duration_when_absent_or_zero() {
     assert_eq!(seg.text, "\u{f0954} 23:59");
 }
 
+// --- cost ---
+
+#[test]
+fn cost_shows_dollar_amount_with_thresholds() {
+    let cases = [
+        (0.42, rgb(0xA6, 0xE2, 0x2E)),
+        (2.5, rgb(0xE6, 0xDB, 0x74)),
+        (12.0, rgb(0xF9, 0x26, 0x72)),
+    ];
+    for (usd, style) in cases {
+        let context = ctx(&format!(r#"{{"cost":{{"total_cost_usd":{usd}}}}}"#));
+        let seg = BuiltinModule::Cost
+            .render(&context, &FakeProbes::default())
+            .unwrap();
+        assert_eq!(seg, Segment::styled(format!("\u{f155} ${usd:.2}"), style));
+    }
+}
+
+#[test]
+fn cost_hides_without_data() {
+    let seg = BuiltinModule::Cost.render(&Context::default(), &FakeProbes::default());
+    assert_eq!(seg, None);
+}
+
+// --- lines ---
+
+#[test]
+fn lines_shows_added_and_removed() {
+    let context = ctx(r#"{"cost":{"total_lines_added":120,"total_lines_removed":45}}"#);
+    let seg = BuiltinModule::Lines
+        .render(&context, &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "+120 -45");
+}
+
+#[test]
+fn lines_hides_when_nothing_changed() {
+    let context = ctx(r#"{"cost":{"total_lines_added":0,"total_lines_removed":0}}"#);
+    let seg = BuiltinModule::Lines.render(&context, &FakeProbes::default());
+    assert_eq!(seg, None);
+}
+
+// --- agent ---
+
+#[test]
+fn agent_shows_subagent_name() {
+    let context = ctx(r#"{"agent":{"name":"Explore"}}"#);
+    let seg = BuiltinModule::Agent
+        .render(&context, &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{ee0d} Explore");
+}
+
+#[test]
+fn agent_hides_without_active_agent() {
+    let seg = BuiltinModule::Agent.render(&Context::default(), &FakeProbes::default());
+    assert_eq!(seg, None);
+}
+
+// --- pr ---
+
+#[test]
+fn pr_colors_follow_review_state() {
+    let cases = [
+        ("approved", rgb(0xA6, 0xE2, 0x2E)),
+        ("changes_requested", rgb(0xF9, 0x26, 0x72)),
+        ("pending", rgb(0xE6, 0xDB, 0x74)),
+    ];
+    for (state, style) in cases {
+        let context = ctx(&format!(
+            r#"{{"pr":{{"number":42,"review_state":"{state}"}}}}"#
+        ));
+        let seg = BuiltinModule::Pr
+            .render(&context, &FakeProbes::default())
+            .unwrap();
+        assert_eq!(seg, Segment::styled("\u{ea64} #42", style));
+    }
+}
+
+#[test]
+fn pr_hides_without_a_number() {
+    let seg = BuiltinModule::Pr.render(&Context::default(), &FakeProbes::default());
+    assert_eq!(seg, None);
+}
+
+// --- worktree ---
+
+#[test]
+fn worktree_shows_name_and_branch() {
+    let context = ctx(r#"{"worktree":{"name":"feature-x","branch":"feature/x"}}"#);
+    let seg = BuiltinModule::Worktree
+        .render(&context, &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{ea63} feature-x:feature/x");
+}
+
+#[test]
+fn worktree_hides_without_a_name() {
+    let seg = BuiltinModule::Worktree.render(&Context::default(), &FakeProbes::default());
+    assert_eq!(seg, None);
+}
+
 // --- registry ---
 
 #[test]
@@ -158,8 +260,23 @@ fn builtin_names_resolve() {
         "memory",
         "ctx",
         "time",
-        "project",
         "usage",
+        "cost",
+        "lines",
+        "agent",
+        "pr",
+        "worktree",
+        "unity",
+        "node",
+        "rust",
+        "go",
+        "python",
+        "dotnet",
+        "ruby",
+        "java",
+        "kotlin",
+        "php",
+        "swift",
     ] {
         assert!(BuiltinModule::from_name(name).is_some(), "missing: {name}");
     }

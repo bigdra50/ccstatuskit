@@ -7,7 +7,9 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-pub const DEFAULT_FORMAT: &str = "$model $directory $memory $ctx $time $git\n$project $usage";
+pub const DEFAULT_FORMAT: &str = "$model $directory $memory $ctx $time $git\n\
+    $unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift\n\
+    $usage $cost $lines $agent $pr $worktree";
 
 #[derive(Debug, Clone, Default, Deserialize)]
 #[serde(default)]
@@ -23,8 +25,23 @@ pub struct Config {
     pub memory: ModuleOverrides,
     pub ctx: ModuleOverrides,
     pub time: ModuleOverrides,
-    pub project: ModuleOverrides,
     pub usage: UsageConfig,
+    pub cost: ModuleOverrides,
+    pub lines: ModuleOverrides,
+    pub agent: ModuleOverrides,
+    pub pr: ModuleOverrides,
+    pub worktree: ModuleOverrides,
+    pub unity: ModuleOverrides,
+    pub node: ModuleOverrides,
+    pub rust: ModuleOverrides,
+    pub go: ModuleOverrides,
+    pub python: ModuleOverrides,
+    pub dotnet: ModuleOverrides,
+    pub ruby: ModuleOverrides,
+    pub java: ModuleOverrides,
+    pub kotlin: ModuleOverrides,
+    pub php: ModuleOverrides,
+    pub swift: ModuleOverrides,
     pub custom: HashMap<String, CustomModuleConfig>,
 }
 
@@ -114,8 +131,23 @@ impl Config {
             BuiltinModule::Memory => generic(&self.memory),
             BuiltinModule::Ctx => generic(&self.ctx),
             BuiltinModule::Time => generic(&self.time),
-            BuiltinModule::Project => generic(&self.project),
             BuiltinModule::Usage => (self.usage.disabled, self.usage.style.as_deref()),
+            BuiltinModule::Cost => generic(&self.cost),
+            BuiltinModule::Lines => generic(&self.lines),
+            BuiltinModule::Agent => generic(&self.agent),
+            BuiltinModule::Pr => generic(&self.pr),
+            BuiltinModule::Worktree => generic(&self.worktree),
+            BuiltinModule::Unity => generic(&self.unity),
+            BuiltinModule::Node => generic(&self.node),
+            BuiltinModule::Rust => generic(&self.rust),
+            BuiltinModule::Go => generic(&self.go),
+            BuiltinModule::Python => generic(&self.python),
+            BuiltinModule::Dotnet => generic(&self.dotnet),
+            BuiltinModule::Ruby => generic(&self.ruby),
+            BuiltinModule::Java => generic(&self.java),
+            BuiltinModule::Kotlin => generic(&self.kotlin),
+            BuiltinModule::Php => generic(&self.php),
+            BuiltinModule::Swift => generic(&self.swift),
         }
     }
 }

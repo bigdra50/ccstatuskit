@@ -18,7 +18,7 @@ Compose your statusline from builtin modules and external commands, laid out wit
 format = """
 $directory $memory $time $git
 $model $ctx $usage
-$project ${custom.unilyze}
+$rust $unity ${custom.unilyze}
 """
 
 [usage]
@@ -62,14 +62,19 @@ See [docs/configuration.md](docs/configuration.md) for the full configuration re
 | --- | --- | --- |
 | `model` | Model name with family color | stdin |
 | `directory` | Project-relative path | stdin |
-| `git` | Branch, dirty/staged/untracked, merge/rebase, ahead/behind | `git` CLI |
+| `git` | Branch, dirty/staged/untracked/renamed, conflicts, stash, merge/rebase, ahead/behind | `git` CLI |
 | `memory` | System RAM used/total | procfs / sysctl / WinAPI |
 | `ctx` | Context-window usage % with thresholds | stdin |
 | `time` | Clock + session duration | system clock |
-| `project` | Project type icon + version (Unity, Node, Rust, Go, …) | marker files |
 | `usage` | Claude quota windows (5h / weekly / per-model) | stdin (+ optional API) |
+| `cost` | Session cost in USD, colored by spend | stdin |
+| `lines` | Lines added/removed this session | stdin |
+| `agent` | Active subagent name | stdin |
+| `pr` | Open PR number, colored by review state | stdin |
+| `worktree` | Worktree name/branch when not the primary checkout | stdin |
+| `unity`, `node`, `rust`, `go`, `python`, `dotnet`, `ruby`, `java`, `kotlin`, `php`, `swift` | Per-language project icon + version, one module per language | marker files |
 
-Every module accepts `disabled = true` and `style = "bold fg:#A6E22E"` (starship-style strings; `[palette]` defines named colors).
+Every module accepts `disabled = true` and `style = "bold fg:#A6E22E"` (starship-style strings; `[palette]` defines named colors). The language modules detect independently — a repo with both `Cargo.toml` and `package.json` shows both `$rust` and `$node`.
 
 ## Usage quotas
 

@@ -28,7 +28,9 @@ $ctx $usage
 - `\$` 表示字面美元符号，`\\` 表示字面反斜杠。未知模块名会静默隐藏，
   因此为新版本编写的配置在旧二进制上也能安全运行。
 - 未设置时的默认值：
-  `$model $directory $memory $ctx $time $git\n$project $usage`
+  `$model $directory $memory $ctx $time $git`、
+  `$unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift`、
+  `$usage $cost $lines $agent $pr $worktree`
 
 ## 内置模块
 
@@ -36,12 +38,17 @@ $ctx $usage
 | --- | --- | --- |
 | `model` | 模型名称（按系列着色） | stdin 无模型信息时隐藏 |
 | `directory` | 相对于项目的路径 | 否则回退到 cwd 的 basename |
-| `git` | 分支、工作区状态、merge/rebase、ahead/behind | 以 `GIT_OPTIONAL_LOCKS=0` 运行 `git`；仓库外隐藏 |
+| `git` | 分支、工作区状态（区分 untracked/rename）、冲突、stash、merge/rebase、ahead/behind | 以 `GIT_OPTIONAL_LOCKS=0` 运行 `git`；仓库外隐藏 |
 | `memory` | 系统内存用量（GB） | >60% / >80% 时变色 |
 | `ctx` | 上下文窗口使用率 | ≥40% / ≥60% 时变色；Claude Code 上报之前隐藏 |
 | `time` | 当前时间与会话时长 | 时长来自 `cost.total_duration_ms` |
-| `project` | 项目类型图标与版本 | Unity、Node/React/Vue/Next、Rust、Go、Python、.NET、Ruby、Java、Kotlin、PHP、Swift |
 | `usage` | Claude 配额窗口 | 见下文 |
+| `cost` | 本次会话花费（USD） | 来自 `cost.total_cost_usd`；≥$1 / ≥$5 时变色 |
+| `lines` | 本次会话变更行数（`+120 -45`） | 来自 `cost.total_lines_added`/`total_lines_removed`；两者都为 0 时隐藏 |
+| `agent` | 当前运行的子代理名称 | 来自 `agent.name`；不在子代理运行中时隐藏 |
+| `pr` | 打开的 PR 编号 | 来自 `pr.number`；按 `pr.review_state`（approved/changes_requested/pending）变色 |
+| `worktree` | worktree 名称（分支不同则一并显示） | 来自 `worktree.name`/`worktree.branch`；在主 checkout 中隐藏 |
+| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | 该语言的项目图标 + 版本 | 一种语言一个模块，各自独立根据标记文件判定；`Cargo.toml` 与 `package.json` 同时存在时 `$rust` 与 `$node` 会同时显示。`dotnet` 在 Unity 项目内隐藏（Unity 会自动生成 `.csproj`，那里请用 `$unity`） |
 
 每个内置模块都支持两个通用选项：
 
@@ -155,7 +162,7 @@ ccstatuskit doctor
 format = """
 $directory $memory $time $git
 $model $ctx $usage
-$project ${custom.unilyze}
+$rust $unity ${custom.unilyze}
 """
 
 [usage]

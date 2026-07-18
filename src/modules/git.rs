@@ -49,23 +49,65 @@ pub fn render(context: &Context, probes: &dyn Probes) -> Option<Segment> {
     }
 
     let status = git(&["status", "--porcelain"]).unwrap_or_default();
-    let staged = status
-        .lines()
-        .any(|l| l.chars().next().is_some_and(|c| "MADRCU".contains(c)));
-    let modified = status.lines().any(|l| l.starts_with(" M"));
-    let untracked = status.lines().any(|l| l.starts_with("??"));
+    let mut conflicted = false;
+    let mut staged = false;
+    let mut renamed = false;
+    let mut modified = false;
+    let mut deleted = false;
+    let mut untracked = false;
+    for line in status.lines() {
+        let code = &line[..line.len().min(2)];
+        if is_conflicted(code) {
+            conflicted = true;
+            continue;
+        }
+        if line.starts_with("??") {
+            untracked = true;
+            continue;
+        }
+        let mut chars = line.chars();
+        let first = chars.next().unwrap_or(' ');
+        let second = chars.next().unwrap_or(' ');
+        if first == 'R' {
+            renamed = true;
+        } else if "MADC".contains(first) {
+            staged = true;
+        }
+        if second == 'M' {
+            modified = true;
+        } else if second == 'D' {
+            deleted = true;
+        }
+    }
+
+    let stashed = git(&["stash", "list"])
+        .map(|s| s.lines().filter(|l| !l.trim().is_empty()).count())
+        .unwrap_or(0);
+
+    if conflicted {
+        icons.push('\u{26a0}'); // ⚠
+    }
     if status.trim().is_empty() {
         icons.push('\u{2713}'); // ✓
     } else {
         if staged {
             icons.push('\u{25cf}'); // ●
         }
+        if renamed {
+            icons.push('\u{00bb}'); // »
+        }
         if modified {
             icons.push('\u{270e}'); // ✎
+        }
+        if deleted {
+            icons.push('\u{2718}'); // ✘
         }
         if untracked {
             icons.push('?');
         }
+    }
+    if stashed > 0 {
+        icons.push_str(&format!("\u{2691}{stashed}")); // ⚑
     }
 
     if let Some(upstream) = git(&["rev-parse", "--abbrev-ref", "@{u}"]) {
@@ -90,12 +132,16 @@ pub fn render(context: &Context, probes: &dyn Probes) -> Option<Segment> {
         }
     }
 
-    let style = if merging || rebasing {
+    let style = if merging || rebasing || conflicted {
         theme::RED
-    } else if staged || modified || untracked {
+    } else if staged || renamed || modified || deleted || untracked {
         theme::YELLOW
     } else {
         theme::GREEN
     };
     Some(Segment::styled(format!("{branch} {icons}"), style))
+}
+
+fn is_conflicted(code: &str) -> bool {
+    matches!(code, "DD" | "AU" | "UD" | "UA" | "DU" | "AA" | "UU")
 }

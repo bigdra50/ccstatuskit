@@ -18,7 +18,7 @@ Rust 製の単一バイナリで、ランタイム依存はない。
 format = """
 $directory $memory $time $git
 $model $ctx $usage
-$project ${custom.unilyze}
+$rust $unity ${custom.unilyze}
 """
 
 [usage]
@@ -69,15 +69,20 @@ cargo install ccstatuskit          # または GitHub Releases のバイナリ�
 | --- | --- | --- |
 | `model` | モデル名（系統別の色付き） | stdin |
 | `directory` | プロジェクト相対パス | stdin |
-| `git` | ブランチ、変更状態、merge/rebase、ahead/behind | `git` CLI |
+| `git` | ブランチ、変更状態（untracked/rename も区別）、コンフリクト、stash、merge/rebase、ahead/behind | `git` CLI |
 | `memory` | システムメモリ使用量 | procfs / sysctl / WinAPI |
 | `ctx` | コンテキストウィンドウ使用率（閾値で色分け） | stdin |
 | `time` | 現在時刻とセッション経過時間 | システム時計 |
-| `project` | プロジェクト種別アイコンとバージョン（Unity、Node、Rust、Go など） | マーカーファイル |
 | `usage` | Claude 利用枠（5h、週次、モデル別） | stdin（+ 任意で API） |
+| `cost` | セッションの利用額（USD、金額で色分け） | stdin |
+| `lines` | セッション中の変更行数（追加/削除） | stdin |
+| `agent` | 実行中のサブエージェント名 | stdin |
+| `pr` | オープン中の PR 番号（レビュー状態で色分け） | stdin |
+| `worktree` | 本体以外の worktree で作業中のときの名前とブランチ | stdin |
+| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | 言語ごとのプロジェクトアイコンとバージョン（1言語1モジュール） | マーカーファイル |
 
 どのモジュールも `disabled = true` と `style = "bold fg:#A6E22E"`（starship 互換の style 文字列）を受け付ける。
-名前付きの色は `[palette]` で定義できる。
+名前付きの色は `[palette]` で定義できる。言語モジュールはそれぞれ独立に判定するため、`Cargo.toml` と `package.json` が両方あるリポジトリでは `$rust` と `$node` が両方表示される。
 
 ## 利用枠の表示
 
