@@ -16,8 +16,9 @@ Compose your statusline from builtin modules and external commands, laid out wit
 ```toml
 # ~/.config/ccstatuskit/config.toml
 format = """
-$model $directory $memory $ctx $time $git
-$project $usage ${custom.unilyze}
+$directory $memory $time $git
+$model $ctx $usage
+$project ${custom.unilyze}
 """
 
 [usage]
