@@ -29,7 +29,9 @@ $ctx $usage
   未知のモジュール名は黙って非表示になるため、新しいバージョン向けの
   設定でも古いバイナリで安全に動く。
 - 未設定時のデフォルト:
-  `$model $directory $memory $ctx $time $git\n$project $usage`
+  `$model $directory $memory $ctx $time $git`、
+  `$unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift`、
+  `$usage $cost $lines $agent $pr $worktree`
 
 ## builtin モジュール
 
@@ -37,12 +39,17 @@ $ctx $usage
 | --- | --- | --- |
 | `model` | モデル名（系統別の色付き） | stdin にモデル情報がなければ非表示 |
 | `directory` | プロジェクト相対パス | なければ cwd の basename |
-| `git` | ブランチ、変更状態、merge/rebase、ahead/behind | `GIT_OPTIONAL_LOCKS=0` で `git` を実行。repo 外では非表示 |
+| `git` | ブランチ、変更状態（untracked/rename も区別）、コンフリクト、stash、merge/rebase、ahead/behind | `GIT_OPTIONAL_LOCKS=0` で `git` を実行。repo 外では非表示 |
 | `memory` | システムメモリ使用量（GB） | >60% / >80% で色が変わる |
 | `ctx` | コンテキストウィンドウ使用率 | ≥40% / ≥60% で色が変わる。Claude Code が報告するまで非表示 |
 | `time` | 現在時刻とセッション経過時間 | 経過時間は `cost.total_duration_ms` から |
-| `project` | プロジェクト種別アイコンとバージョン | Unity、Node/React/Vue/Next、Rust、Go、Python、.NET、Ruby、Java、Kotlin、PHP、Swift |
 | `usage` | Claude 利用枠 | 後述 |
+| `cost` | セッションの利用額（USD） | `cost.total_cost_usd` から。$1 / $5 以上で色が変わる |
+| `lines` | セッション中の変更行数（`+120 -45`） | `cost.total_lines_added`/`total_lines_removed` から。両方 0 なら非表示 |
+| `agent` | 実行中のサブエージェント名 | `agent.name` から。サブエージェント実行中以外は非表示 |
+| `pr` | オープン中の PR 番号 | `pr.number` から。`pr.review_state`（approved/changes_requested/pending）で色が変わる |
+| `worktree` | worktree 名（ブランチが異なる場合はブランチも） | `worktree.name`/`worktree.branch` から。本体の checkout では非表示 |
+| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | その言語のプロジェクトアイコン+バージョン | 1言語1モジュールで、マーカーファイルからそれぞれ独立に判定する。`Cargo.toml` と `package.json` が両方あれば `$rust` と `$node` が両方表示される。`dotnet` は Unity プロジェクト内では非表示（Unity は自前の `.csproj` を生成するため、そこでは `$unity` を使う） |
 
 どの builtin も共通オプションを2つ受け付ける。
 
@@ -158,7 +165,7 @@ ccstatuskit doctor
 format = """
 $directory $memory $time $git
 $model $ctx $usage
-$project ${custom.unilyze}
+$rust $unity ${custom.unilyze}
 """
 
 [usage]

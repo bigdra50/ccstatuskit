@@ -2,15 +2,31 @@
 //! returns `Option<Segment>` — `None` means hidden, and any missing input
 //! hides the module rather than erroring (fail-soft).
 
+mod agent;
+mod cost;
 mod ctx;
 pub mod custom;
 mod directory;
+mod dotnet;
 mod git;
+mod go;
+mod java;
+mod kotlin;
+pub(crate) mod lang_support;
+mod lines;
 mod memory;
 mod model;
-mod project;
+mod node;
+mod php;
+mod pr;
+mod python;
+mod ruby;
+mod rust_lang;
+mod swift;
 mod time;
+mod unity;
 mod usage;
+mod worktree;
 
 use crate::config::Config;
 use crate::context::Context;
@@ -25,20 +41,50 @@ pub enum BuiltinModule {
     Memory,
     Ctx,
     Time,
-    Project,
     Usage,
+    Cost,
+    Lines,
+    Agent,
+    Pr,
+    Worktree,
+    Unity,
+    Node,
+    Rust,
+    Go,
+    Python,
+    Dotnet,
+    Ruby,
+    Java,
+    Kotlin,
+    Php,
+    Swift,
 }
 
 impl BuiltinModule {
-    pub const ALL: [BuiltinModule; 8] = [
+    pub const ALL: [BuiltinModule; 23] = [
         Self::Model,
         Self::Directory,
         Self::Git,
         Self::Memory,
         Self::Ctx,
         Self::Time,
-        Self::Project,
         Self::Usage,
+        Self::Cost,
+        Self::Lines,
+        Self::Agent,
+        Self::Pr,
+        Self::Worktree,
+        Self::Unity,
+        Self::Node,
+        Self::Rust,
+        Self::Go,
+        Self::Python,
+        Self::Dotnet,
+        Self::Ruby,
+        Self::Java,
+        Self::Kotlin,
+        Self::Php,
+        Self::Swift,
     ];
 
     pub fn name(self) -> &'static str {
@@ -49,8 +95,23 @@ impl BuiltinModule {
             Self::Memory => "memory",
             Self::Ctx => "ctx",
             Self::Time => "time",
-            Self::Project => "project",
             Self::Usage => "usage",
+            Self::Cost => "cost",
+            Self::Lines => "lines",
+            Self::Agent => "agent",
+            Self::Pr => "pr",
+            Self::Worktree => "worktree",
+            Self::Unity => "unity",
+            Self::Node => "node",
+            Self::Rust => "rust",
+            Self::Go => "go",
+            Self::Python => "python",
+            Self::Dotnet => "dotnet",
+            Self::Ruby => "ruby",
+            Self::Java => "java",
+            Self::Kotlin => "kotlin",
+            Self::Php => "php",
+            Self::Swift => "swift",
         }
     }
 
@@ -62,8 +123,23 @@ impl BuiltinModule {
             "memory" => Self::Memory,
             "ctx" => Self::Ctx,
             "time" => Self::Time,
-            "project" => Self::Project,
             "usage" => Self::Usage,
+            "cost" => Self::Cost,
+            "lines" => Self::Lines,
+            "agent" => Self::Agent,
+            "pr" => Self::Pr,
+            "worktree" => Self::Worktree,
+            "unity" => Self::Unity,
+            "node" => Self::Node,
+            "rust" => Self::Rust,
+            "go" => Self::Go,
+            "python" => Self::Python,
+            "dotnet" => Self::Dotnet,
+            "ruby" => Self::Ruby,
+            "java" => Self::Java,
+            "kotlin" => Self::Kotlin,
+            "php" => Self::Php,
+            "swift" => Self::Swift,
             _ => return None,
         })
     }
@@ -87,8 +163,23 @@ impl BuiltinModule {
             Self::Memory => memory::render(context, probes),
             Self::Ctx => ctx::render(context, probes),
             Self::Time => time::render(context, probes),
-            Self::Project => project::render(context, probes),
             Self::Usage => usage::render(context, config, probes),
+            Self::Cost => cost::render(context, probes),
+            Self::Lines => lines::render(context, probes),
+            Self::Agent => agent::render(context, probes),
+            Self::Pr => pr::render(context, probes),
+            Self::Worktree => worktree::render(context, probes),
+            Self::Unity => unity::render(context, probes),
+            Self::Node => node::render(context, probes),
+            Self::Rust => rust_lang::render(context, probes),
+            Self::Go => go::render(context, probes),
+            Self::Python => python::render(context, probes),
+            Self::Dotnet => dotnet::render(context, probes),
+            Self::Ruby => ruby::render(context, probes),
+            Self::Java => java::render(context, probes),
+            Self::Kotlin => kotlin::render(context, probes),
+            Self::Php => php::render(context, probes),
+            Self::Swift => swift::render(context, probes),
         }
     }
 }

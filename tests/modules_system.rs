@@ -62,7 +62,7 @@ fn memory_hides_when_probe_has_nothing() {
     assert_eq!(seg, None);
 }
 
-// --- project ---
+// --- per-language project modules ---
 
 fn project_ctx(dir: &std::path::Path) -> Context {
     ctx(&format!(
@@ -72,7 +72,7 @@ fn project_ctx(dir: &std::path::Path) -> Context {
 }
 
 #[test]
-fn project_detects_unity_with_editor_version() {
+fn unity_detects_editor_version() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::create_dir(dir.path().join("Assets")).unwrap();
     std::fs::create_dir(dir.path().join("ProjectSettings")).unwrap();
@@ -81,59 +81,196 @@ fn project_detects_unity_with_editor_version() {
         "m_EditorVersion: 6000.0.32f1\nm_EditorVersionWithRevision: 6000.0.32f1 (x)\n",
     )
     .unwrap();
-    let seg = BuiltinModule::Project
+    let seg = BuiltinModule::Unity
         .render(&project_ctx(dir.path()), &FakeProbes::default())
         .unwrap();
     assert_eq!(seg.text, "\u{e721} 6000.0.32f1");
 }
 
 #[test]
-fn project_detects_rust_crate_version() {
+fn unity_hides_outside_a_unity_project() {
+    let dir = tempfile::tempdir().unwrap();
+    let seg = BuiltinModule::Unity.render(&project_ctx(dir.path()), &FakeProbes::default());
+    assert_eq!(seg, None);
+}
+
+#[test]
+fn rust_detects_crate_version() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("Cargo.toml"),
         "[package]\nname = \"x\"\nversion = \"1.2.3\"\n",
     )
     .unwrap();
-    let seg = BuiltinModule::Project
+    let seg = BuiltinModule::Rust
         .render(&project_ctx(dir.path()), &FakeProbes::default())
         .unwrap();
     assert_eq!(seg.text, "\u{e7a8} 1.2.3");
 }
 
 #[test]
-fn project_detects_react_from_package_json() {
+fn node_detects_react_from_package_json() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("package.json"),
         r#"{"dependencies":{"react":"^18.2.0"}}"#,
     )
     .unwrap();
-    let seg = BuiltinModule::Project
+    let seg = BuiltinModule::Node
         .render(&project_ctx(dir.path()), &FakeProbes::default())
         .unwrap();
     assert_eq!(seg.text, "\u{e7ba} 18.2.0");
 }
 
 #[test]
-fn project_detects_go_module() {
+fn node_falls_back_to_plain_node_icon() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("package.json"),
+        r#"{"engines":{"node":">=20"}}"#,
+    )
+    .unwrap();
+    let seg = BuiltinModule::Node
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{e719} 20");
+}
+
+#[test]
+fn go_detects_module_version() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("go.mod"),
         "module example.com/x\n\ngo 1.22\n",
     )
     .unwrap();
-    let seg = BuiltinModule::Project
+    let seg = BuiltinModule::Go
         .render(&project_ctx(dir.path()), &FakeProbes::default())
         .unwrap();
     assert_eq!(seg.text, "\u{e724} 1.22");
 }
 
 #[test]
-fn project_hides_when_nothing_detected() {
+fn python_detects_pinned_version() {
     let dir = tempfile::tempdir().unwrap();
-    let seg = BuiltinModule::Project.render(&project_ctx(dir.path()), &FakeProbes::default());
+    std::fs::write(
+        dir.path().join("pyproject.toml"),
+        "[project]\nname = \"x\"\n",
+    )
+    .unwrap();
+    std::fs::write(dir.path().join(".python-version"), "3.12\n").unwrap();
+    let seg = BuiltinModule::Python
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{f0320} 3.12");
+}
+
+#[test]
+fn dotnet_detects_target_framework() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("app.csproj"),
+        "<Project><PropertyGroup><TargetFramework>net8.0</TargetFramework></PropertyGroup></Project>",
+    )
+    .unwrap();
+    let seg = BuiltinModule::Dotnet
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{f0aae} net8.0");
+}
+
+#[test]
+fn dotnet_hides_inside_a_unity_project() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::create_dir(dir.path().join("Assets")).unwrap();
+    std::fs::create_dir(dir.path().join("ProjectSettings")).unwrap();
+    std::fs::write(dir.path().join("Assembly-CSharp.csproj"), "<Project/>").unwrap();
+    let seg = BuiltinModule::Dotnet.render(&project_ctx(dir.path()), &FakeProbes::default());
     assert_eq!(seg, None);
+}
+
+#[test]
+fn ruby_detects_pinned_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("Gemfile"),
+        "source \"https://rubygems.org\"\n",
+    )
+    .unwrap();
+    std::fs::write(dir.path().join(".ruby-version"), "3.3.0\n").unwrap();
+    let seg = BuiltinModule::Ruby
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{f0d2d} 3.3.0");
+}
+
+#[test]
+fn java_detects_language_version_from_pom() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("pom.xml"),
+        "<project><properties><java.version>21</java.version></properties></project>",
+    )
+    .unwrap();
+    let seg = BuiltinModule::Java
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{e738} 21");
+}
+
+#[test]
+fn kotlin_detects_gradle_kts() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(dir.path().join("build.gradle.kts"), "").unwrap();
+    let seg = BuiltinModule::Kotlin
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{f10fe}");
+}
+
+#[test]
+fn php_detects_required_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("composer.json"),
+        r#"{"require":{"php":"^8.3"}}"#,
+    )
+    .unwrap();
+    let seg = BuiltinModule::Php
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{f031f} 8.3");
+}
+
+#[test]
+fn swift_detects_package_manifest() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(dir.path().join("Package.swift"), "").unwrap();
+    let seg = BuiltinModule::Swift
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{e755}");
+}
+
+#[test]
+fn language_modules_hide_when_nothing_detected() {
+    let dir = tempfile::tempdir().unwrap();
+    for module in [
+        BuiltinModule::Unity,
+        BuiltinModule::Node,
+        BuiltinModule::Rust,
+        BuiltinModule::Go,
+        BuiltinModule::Python,
+        BuiltinModule::Dotnet,
+        BuiltinModule::Ruby,
+        BuiltinModule::Java,
+        BuiltinModule::Kotlin,
+        BuiltinModule::Php,
+        BuiltinModule::Swift,
+    ] {
+        let seg = module.render(&project_ctx(dir.path()), &FakeProbes::default());
+        assert_eq!(seg, None, "{module:?} should hide in an empty directory");
+    }
 }
 
 // --- git ---
@@ -214,4 +351,41 @@ fn git_hides_outside_a_repository() {
     let probes = FakeProbes::default();
     let seg = BuiltinModule::Git.render(&git_ctx(), &probes);
     assert_eq!(seg, None);
+}
+
+#[test]
+fn git_conflict_renders_red_with_warning_icon() {
+    let probes = git_probes()
+        .with_cmd("git branch --show-current", "main\n")
+        .with_cmd("git status --porcelain", "UU conflicted.rs\n");
+    let seg = BuiltinModule::Git.render(&git_ctx(), &probes).unwrap();
+    assert_eq!(seg.text, "\u{e0a0} main \u{26a0}");
+    assert_eq!(seg.style, rgb(0xF9, 0x26, 0x72));
+}
+
+#[test]
+fn git_shows_renamed_and_deleted_marks() {
+    let probes = git_probes()
+        .with_cmd("git branch --show-current", "main\n")
+        .with_cmd(
+            "git status --porcelain",
+            "R  old.rs -> new.rs\n D gone.rs\n",
+        );
+    let seg = BuiltinModule::Git.render(&git_ctx(), &probes).unwrap();
+    assert_eq!(seg.text, "\u{e0a0} main \u{00bb}\u{2718}");
+    assert_eq!(seg.style, rgb(0xE6, 0xDB, 0x74));
+}
+
+#[test]
+fn git_shows_stash_count_on_a_clean_tree() {
+    let probes = git_probes()
+        .with_cmd("git branch --show-current", "main\n")
+        .with_cmd("git status --porcelain", "")
+        .with_cmd(
+            "git stash list",
+            "stash@{0}: WIP on main\nstash@{1}: WIP on main\n",
+        );
+    let seg = BuiltinModule::Git.render(&git_ctx(), &probes).unwrap();
+    assert_eq!(seg.text, "\u{e0a0} main \u{2713}\u{2691}2");
+    assert_eq!(seg.style, rgb(0xA6, 0xE2, 0x2E));
 }

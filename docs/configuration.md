@@ -30,7 +30,9 @@ $ctx $usage
   names hide silently, so a config written for a newer version degrades
   gracefully.
 - Default when unset:
-  `$model $directory $memory $ctx $time $git\n$project $usage`
+  `$model $directory $memory $ctx $time $git`,
+  `$unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift`,
+  `$usage $cost $lines $agent $pr $worktree`
 
 ## Builtin modules
 
@@ -38,12 +40,17 @@ $ctx $usage
 | --- | --- | --- |
 | `model` | Model name with family color | Hidden when stdin has no model info |
 | `directory` | Project-relative path | Falls back to the cwd basename |
-| `git` | Branch, dirty/staged/untracked, merge/rebase, ahead/behind | Runs `git` with `GIT_OPTIONAL_LOCKS=0`; hidden outside a repository |
+| `git` | Branch, dirty/staged/untracked/renamed, conflicts, stash, merge/rebase, ahead/behind | Runs `git` with `GIT_OPTIONAL_LOCKS=0`; hidden outside a repository |
 | `memory` | System RAM used/total in GB | Colored at >60% / >80% |
 | `ctx` | Context-window usage percent | Colored at ≥40% / ≥60%; hidden until Claude Code reports it |
 | `time` | Clock plus session duration | Duration from `cost.total_duration_ms` |
-| `project` | Project type icon + version | Unity, Node/React/Vue/Next, Rust, Go, Python, .NET, Ruby, Java, Kotlin, PHP, Swift |
 | `usage` | Claude quota windows | See below |
+| `cost` | Session cost in USD | From `cost.total_cost_usd`; colored at ≥$1 / ≥$5 |
+| `lines` | Lines added/removed this session (`+120 -45`) | From `cost.total_lines_added`/`total_lines_removed`; hidden when both are zero |
+| `agent` | Active subagent name | From `agent.name`; hidden outside a subagent run |
+| `pr` | Open PR number | From `pr.number`; colored by `pr.review_state` (approved/changes_requested/pending) |
+| `worktree` | Worktree name (and branch, if it differs) | From `worktree.name`/`worktree.branch`; hidden in the primary checkout |
+| `unity`, `node`, `rust`, `go`, `python`, `dotnet`, `ruby`, `java`, `kotlin`, `php`, `swift` | Project icon + version for that language | One module per language, detected independently from marker files; a repo can match more than one (`Cargo.toml` + `package.json` shows both `$rust` and `$node`). `dotnet` hides inside a Unity project (Unity generates its own `.csproj` files — use `$unity` there) |
 
 Every builtin accepts two common options:
 
@@ -161,7 +168,7 @@ Errors exit 1; warnings (things that merely hide) exit 0.
 format = """
 $directory $memory $time $git
 $model $ctx $usage
-$project ${custom.unilyze}
+$rust $unity ${custom.unilyze}
 """
 
 [usage]
