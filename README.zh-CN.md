@@ -16,8 +16,9 @@ Rust 编写的单一二进制文件，无运行时依赖。
 ```toml
 # ~/.config/ccstatuskit/config.toml
 format = """
-$model $directory $memory $ctx $time $git
-$project $usage ${custom.unilyze}
+$directory $memory $time $git
+$model $ctx $usage
+$project ${custom.unilyze}
 """
 
 [usage]
