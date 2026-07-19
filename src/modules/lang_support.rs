@@ -61,3 +61,21 @@ pub fn first_with_extension(dir: &Path, extension: &str) -> Option<std::path::Pa
 pub fn is_unity_project(dir: &Path) -> bool {
     dir.join("Assets").is_dir() && dir.join("ProjectSettings").is_dir()
 }
+
+/// Extracts the first version-looking token from `--version`-style output:
+/// `rustc 1.85.0 (…)` → `1.85.0`, `go version go1.22.1 linux/amd64` →
+/// `1.22.1`, `v20.11.0` → `20.11.0`, `ruby 3.3.0p0 (…)` → `3.3.0`.
+/// Tool-name prefixes are trimmed and build suffixes cut at the first
+/// non-`[0-9.]` character; a match must contain a dot so dates and
+/// revision hashes don't qualify.
+pub fn parse_version_output(output: &str) -> Option<String> {
+    output.split_whitespace().find_map(|token| {
+        let token = token.trim_start_matches(|c: char| c.is_ascii_alphabetic());
+        let version: String = token
+            .chars()
+            .take_while(|c| c.is_ascii_digit() || *c == '.')
+            .collect();
+        (version.contains('.') && version.starts_with(|c: char| c.is_ascii_digit()))
+            .then_some(version)
+    })
+}

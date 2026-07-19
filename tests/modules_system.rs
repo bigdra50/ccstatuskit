@@ -95,17 +95,29 @@ fn unity_hides_outside_a_unity_project() {
 }
 
 #[test]
-fn rust_detects_crate_version() {
+fn rust_shows_toolchain_version_from_rustc() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("Cargo.toml"),
         "[package]\nname = \"x\"\nversion = \"1.2.3\"\n",
     )
     .unwrap();
+    let probes =
+        FakeProbes::default().with_cmd("rustc --version", "rustc 1.85.0 (4d91de4e4 2025-02-17)\n");
+    let seg = BuiltinModule::Rust
+        .render(&project_ctx(dir.path()), &probes)
+        .unwrap();
+    assert_eq!(seg.text, "\u{e7a8} 1.85.0");
+}
+
+#[test]
+fn rust_shows_icon_only_without_rustc() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(dir.path().join("Cargo.toml"), "[package]\nname = \"x\"\n").unwrap();
     let seg = BuiltinModule::Rust
         .render(&project_ctx(dir.path()), &FakeProbes::default())
         .unwrap();
-    assert_eq!(seg.text, "\u{e7a8} 1.2.3");
+    assert_eq!(seg.text, "\u{e7a8}");
 }
 
 #[test]
@@ -123,7 +135,18 @@ fn node_detects_react_from_package_json() {
 }
 
 #[test]
-fn node_falls_back_to_plain_node_icon() {
+fn node_shows_runtime_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(dir.path().join("package.json"), r#"{"name":"x"}"#).unwrap();
+    let probes = FakeProbes::default().with_cmd("node --version", "v20.11.0\n");
+    let seg = BuiltinModule::Node
+        .render(&project_ctx(dir.path()), &probes)
+        .unwrap();
+    assert_eq!(seg.text, "\u{e719} 20.11.0");
+}
+
+#[test]
+fn node_falls_back_to_engines_constraint() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("package.json"),
@@ -137,7 +160,22 @@ fn node_falls_back_to_plain_node_icon() {
 }
 
 #[test]
-fn go_detects_module_version() {
+fn go_shows_toolchain_version_from_go_binary() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("go.mod"),
+        "module example.com/x\n\ngo 1.22\n",
+    )
+    .unwrap();
+    let probes = FakeProbes::default().with_cmd("go version", "go version go1.22.1 linux/amd64\n");
+    let seg = BuiltinModule::Go
+        .render(&project_ctx(dir.path()), &probes)
+        .unwrap();
+    assert_eq!(seg.text, "\u{e724} 1.22.1");
+}
+
+#[test]
+fn go_falls_back_to_gomod_directive() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("go.mod"),
@@ -151,7 +189,22 @@ fn go_detects_module_version() {
 }
 
 #[test]
-fn python_detects_pinned_version() {
+fn python_shows_interpreter_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("pyproject.toml"),
+        "[project]\nname = \"x\"\n",
+    )
+    .unwrap();
+    let probes = FakeProbes::default().with_cmd("python3 --version", "Python 3.12.1\n");
+    let seg = BuiltinModule::Python
+        .render(&project_ctx(dir.path()), &probes)
+        .unwrap();
+    assert_eq!(seg.text, "\u{f0320} 3.12.1");
+}
+
+#[test]
+fn python_falls_back_to_pinned_version() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("pyproject.toml"),
@@ -190,7 +243,25 @@ fn dotnet_hides_inside_a_unity_project() {
 }
 
 #[test]
-fn ruby_detects_pinned_version() {
+fn ruby_shows_interpreter_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("Gemfile"),
+        "source \"https://rubygems.org\"\n",
+    )
+    .unwrap();
+    let probes = FakeProbes::default().with_cmd(
+        "ruby --version",
+        "ruby 3.3.6p108 (2024-11-05 revision 75015d4c1f) [arm64-darwin23]\n",
+    );
+    let seg = BuiltinModule::Ruby
+        .render(&project_ctx(dir.path()), &probes)
+        .unwrap();
+    assert_eq!(seg.text, "\u{f0d2d} 3.3.6");
+}
+
+#[test]
+fn ruby_falls_back_to_pinned_version() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("Gemfile"),
@@ -205,7 +276,21 @@ fn ruby_detects_pinned_version() {
 }
 
 #[test]
-fn java_detects_language_version_from_pom() {
+fn java_shows_jdk_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(dir.path().join("pom.xml"), "<project></project>").unwrap();
+    let probes = FakeProbes::default().with_cmd(
+        "java --version",
+        "openjdk 21.0.2 2024-01-16\nOpenJDK Runtime Environment (build 21.0.2+13)\n",
+    );
+    let seg = BuiltinModule::Java
+        .render(&project_ctx(dir.path()), &probes)
+        .unwrap();
+    assert_eq!(seg.text, "\u{e738} 21.0.2");
+}
+
+#[test]
+fn java_falls_back_to_pom_language_version() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("pom.xml"),
@@ -229,7 +314,21 @@ fn kotlin_detects_gradle_kts() {
 }
 
 #[test]
-fn php_detects_required_version() {
+fn php_shows_interpreter_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(dir.path().join("composer.json"), r#"{"name":"x/x"}"#).unwrap();
+    let probes = FakeProbes::default().with_cmd(
+        "php --version",
+        "PHP 8.3.2 (cli) (built: Jan 20 2024 14:16:20) (NTS)\n",
+    );
+    let seg = BuiltinModule::Php
+        .render(&project_ctx(dir.path()), &probes)
+        .unwrap();
+    assert_eq!(seg.text, "\u{f031f} 8.3.2");
+}
+
+#[test]
+fn php_falls_back_to_composer_constraint() {
     let dir = tempfile::tempdir().unwrap();
     std::fs::write(
         dir.path().join("composer.json"),
@@ -252,10 +351,45 @@ fn swift_detects_package_manifest() {
     assert_eq!(seg.text, "\u{e755}");
 }
 
+// --- package (project's own declared version) ---
+
+#[test]
+fn package_shows_cargo_crate_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("Cargo.toml"),
+        "[package]\nname = \"x\"\nversion = \"1.2.3\"\n",
+    )
+    .unwrap();
+    let seg = BuiltinModule::Package
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{f03d7} 1.2.3");
+}
+
+#[test]
+fn package_shows_package_json_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(dir.path().join("package.json"), r#"{"version":"2.0.1"}"#).unwrap();
+    let seg = BuiltinModule::Package
+        .render(&project_ctx(dir.path()), &FakeProbes::default())
+        .unwrap();
+    assert_eq!(seg.text, "\u{f03d7} 2.0.1");
+}
+
+#[test]
+fn package_hides_without_a_declared_version() {
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(dir.path().join("package.json"), r#"{"name":"x"}"#).unwrap();
+    let seg = BuiltinModule::Package.render(&project_ctx(dir.path()), &FakeProbes::default());
+    assert_eq!(seg, None);
+}
+
 #[test]
 fn language_modules_hide_when_nothing_detected() {
     let dir = tempfile::tempdir().unwrap();
     for module in [
+        BuiltinModule::Package,
         BuiltinModule::Unity,
         BuiltinModule::Node,
         BuiltinModule::Rust,

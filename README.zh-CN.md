@@ -79,7 +79,8 @@ cargo install ccstatuskit          # 或从 GitHub Releases 获取二进制文�
 | `agent` | 当前运行的子代理名称 | stdin |
 | `pr` | 打开的 PR 编号（按评审状态着色） | stdin |
 | `worktree` | 不在主工作区时显示的 worktree 名称与分支 | stdin |
-| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | 每种语言各自的项目图标与版本（一种语言一个模块） | 标记文件 |
+| `package` | 项目自身声明的版本（starship 方式） | `Cargo.toml` / `package.json` / `pyproject.toml` / `composer.json` / `pom.xml` |
+| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | 每种语言各自的图标与工具链版本（一种语言一个模块） | 真实二进制（`rustc --version`、`go version` 等），不可用时回退到项目文件 |
 
 所有模块都支持 `disabled = true` 与 `style = "bold fg:#A6E22E"`（starship 风格的样式字符串）。
 命名颜色可在 `[palette]` 中定义。各语言模块独立判定，当仓库同时存在 `Cargo.toml` 与 `package.json` 时，`$rust` 与 `$node` 会同时显示。

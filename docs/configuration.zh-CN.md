@@ -29,7 +29,7 @@ $ctx $usage
   因此为新版本编写的配置在旧二进制上也能安全运行。
 - 未设置时的默认值：
   `$model $directory $memory $ctx $time $git`、
-  `$unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift`、
+  `$package $unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift`、
   `$usage $cost $lines $agent $pr $worktree`
 
 ## 内置模块
@@ -48,7 +48,8 @@ $ctx $usage
 | `agent` | 当前运行的子代理名称 | 来自 `agent.name`；不在子代理运行中时隐藏 |
 | `pr` | 打开的 PR 编号 | 来自 `pr.number`；按 `pr.review_state`（approved/changes_requested/pending）变色 |
 | `worktree` | worktree 名称（分支不同则一并显示） | 来自 `worktree.name`/`worktree.branch`；在主 checkout 中隐藏 |
-| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | 该语言的项目图标 + 版本 | 一种语言一个模块，各自独立根据标记文件判定；`Cargo.toml` 与 `package.json` 同时存在时 `$rust` 与 `$node` 会同时显示。`dotnet` 在 Unity 项目内隐藏（Unity 会自动生成 `.csproj`，那里请用 `$unity`） |
+| `package` | 项目自身声明的版本 | starship 方式：读取 `Cargo.toml`、`package.json`、`pyproject.toml`、`composer.json` 或 `pom.xml` 的 `version` 字段（取第一个匹配） |
+| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | 语言图标 + 工具链版本 | 一种语言一个模块，各自独立根据标记文件判定；`Cargo.toml` 与 `package.json` 同时存在时 `$rust` 与 `$node` 会同时显示。版本指*工具链*的版本，从真实二进制获取（`rustc --version`、`go version`、`python3 --version` 等），二进制不可用时回退到项目文件（`go.mod` 指令、`.python-version` 等）。例外：`unity` 显示编辑器版本，`dotnet` 显示目标框架，`node` 检测到 React/Vue/Next/TypeScript 时显示该框架的依赖版本。`dotnet` 在 Unity 项目内隐藏（Unity 会自动生成 `.csproj`，那里请用 `$unity`） |
 
 每个内置模块都支持两个通用选项：
 
@@ -127,7 +128,7 @@ stdout 的第一行成为 segment，空输出表示隐藏。
 ## 全局选项
 
 ```toml
-command_timeout = 250    # 所有模块共享的实时间预算（毫秒）
+command_timeout = 500    # 所有模块共享的实时间预算（毫秒）
 ```
 
 设置环境变量 `NO_COLOR` 可去掉全部样式。

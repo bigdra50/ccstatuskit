@@ -47,7 +47,7 @@ when_dir = ["Assets"]          # 仅当项目目录中存在该路径时运行
 | 事件 | 结果 |
 | --- | --- |
 | 非零退出码 | 隐藏 segment（丢弃 stdout） |
-| 在 `command_timeout`（默认 250 ms）内无输出 | 杀死进程并隐藏 segment |
+| 在 `command_timeout`（默认 500 ms）内无输出 | 杀死进程并隐藏 segment |
 | 崩溃或无法启动的命令 | 隐藏 segment |
 
 模块最多失去自己的 segment。

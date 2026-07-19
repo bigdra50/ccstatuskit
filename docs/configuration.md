@@ -31,7 +31,7 @@ $ctx $usage
   gracefully.
 - Default when unset:
   `$model $directory $memory $ctx $time $git`,
-  `$unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift`,
+  `$package $unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift`,
   `$usage $cost $lines $agent $pr $worktree`
 
 ## Builtin modules
@@ -50,7 +50,8 @@ $ctx $usage
 | `agent` | Active subagent name | From `agent.name`; hidden outside a subagent run |
 | `pr` | Open PR number | From `pr.number`; colored by `pr.review_state` (approved/changes_requested/pending) |
 | `worktree` | Worktree name (and branch, if it differs) | From `worktree.name`/`worktree.branch`; hidden in the primary checkout |
-| `unity`, `node`, `rust`, `go`, `python`, `dotnet`, `ruby`, `java`, `kotlin`, `php`, `swift` | Project icon + version for that language | One module per language, detected independently from marker files; a repo can match more than one (`Cargo.toml` + `package.json` shows both `$rust` and `$node`). `dotnet` hides inside a Unity project (Unity generates its own `.csproj` files — use `$unity` there) |
+| `package` | The project's own declared version | starship-style: reads the `version` field from `Cargo.toml`, `package.json`, `pyproject.toml`, `composer.json`, or `pom.xml` (first match wins) |
+| `unity`, `node`, `rust`, `go`, `python`, `dotnet`, `ruby`, `java`, `kotlin`, `php`, `swift` | Language icon + toolchain version | One module per language, detected independently from marker files; a repo can match more than one (`Cargo.toml` + `package.json` shows both `$rust` and `$node`). The version is the *toolchain's*, from the real binary (`rustc --version`, `go version`, `python3 --version`, …), falling back to project files (`go.mod` directive, `.python-version`, …) when the binary isn't available. Exceptions: `unity` shows the editor version, `dotnet` the target framework, and `node`'s React/Vue/Next/TypeScript variants that framework's dependency version. `dotnet` hides inside a Unity project (Unity generates its own `.csproj` files — use `$unity` there) |
 
 Every builtin accepts two common options:
 
@@ -132,7 +133,7 @@ legal: print nothing and it never appears.
 ## Global options
 
 ```toml
-command_timeout = 250    # wall-clock budget in ms shared by all modules
+command_timeout = 500    # wall-clock budget in ms shared by all modules
 ```
 
 Set the `NO_COLOR` environment variable to strip all styling.

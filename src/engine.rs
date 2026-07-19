@@ -28,7 +28,7 @@ pub struct EngineOptions {
 impl Default for EngineOptions {
     fn default() -> Self {
         EngineOptions {
-            budget: Duration::from_millis(250),
+            budget: Duration::from_millis(500),
             color: true,
         }
     }

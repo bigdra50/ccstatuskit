@@ -266,6 +266,7 @@ fn builtin_names_resolve() {
         "agent",
         "pr",
         "worktree",
+        "package",
         "unity",
         "node",
         "rust",

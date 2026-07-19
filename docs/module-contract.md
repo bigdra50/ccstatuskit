@@ -49,7 +49,7 @@ Prefer the env vars for simple modules; parse stdin when you need more.
 | Event | Result |
 | --- | --- |
 | Nonzero exit | Segment hidden (stdout discarded) |
-| No output within `command_timeout` (default 250 ms) | Process killed, segment hidden |
+| No output within `command_timeout` (default 500 ms) | Process killed, segment hidden |
 | Crash / unspawnable command | Segment hidden |
 
 A module can lose its segment; it can never break the statusline or leak a

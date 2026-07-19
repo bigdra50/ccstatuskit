@@ -40,7 +40,7 @@ impl ModuleRunner for BuiltinRunner {
             ModuleRef::Custom(name) => {
                 let cfg = self.config.custom.get(name)?;
                 let timeout =
-                    std::time::Duration::from_millis(self.config.command_timeout.unwrap_or(250));
+                    std::time::Duration::from_millis(self.config.command_timeout.unwrap_or(500));
                 crate::modules::custom::render(cfg, &self.context, &self.config.palette, timeout)
             }
         }

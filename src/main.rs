@@ -65,7 +65,7 @@ fn main() {
     });
 
     let options = EngineOptions {
-        budget: Duration::from_millis(config.command_timeout.unwrap_or(250)),
+        budget: Duration::from_millis(config.command_timeout.unwrap_or(500)),
         color: std::env::var_os("NO_COLOR").is_none(),
     };
     let runner = Arc::new(BuiltinRunner {

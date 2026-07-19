@@ -30,7 +30,7 @@ $ctx $usage
   設定でも古いバイナリで安全に動く。
 - 未設定時のデフォルト:
   `$model $directory $memory $ctx $time $git`、
-  `$unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift`、
+  `$package $unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift`、
   `$usage $cost $lines $agent $pr $worktree`
 
 ## builtin モジュール
@@ -49,7 +49,8 @@ $ctx $usage
 | `agent` | 実行中のサブエージェント名 | `agent.name` から。サブエージェント実行中以外は非表示 |
 | `pr` | オープン中の PR 番号 | `pr.number` から。`pr.review_state`（approved/changes_requested/pending）で色が変わる |
 | `worktree` | worktree 名（ブランチが異なる場合はブランチも） | `worktree.name`/`worktree.branch` から。本体の checkout では非表示 |
-| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | その言語のプロジェクトアイコン+バージョン | 1言語1モジュールで、マーカーファイルからそれぞれ独立に判定する。`Cargo.toml` と `package.json` が両方あれば `$rust` と `$node` が両方表示される。`dotnet` は Unity プロジェクト内では非表示（Unity は自前の `.csproj` を生成するため、そこでは `$unity` を使う） |
+| `package` | プロジェクト自身の宣言バージョン | starship 方式: `Cargo.toml`、`package.json`、`pyproject.toml`、`composer.json`、`pom.xml` の `version` フィールドを読む（最初に見つかったものを採用） |
+| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | 言語アイコン+ツールチェインのバージョン | 1言語1モジュールで、マーカーファイルからそれぞれ独立に判定する。`Cargo.toml` と `package.json` が両方あれば `$rust` と `$node` が両方表示される。バージョンは*ツールチェイン*のもので、実バイナリ（`rustc --version`、`go version`、`python3 --version` など）から取得し、バイナリが無ければプロジェクトファイル（`go.mod` の指定、`.python-version` など）にフォールバックする。例外: `unity` はエディタのバージョン、`dotnet` はターゲットフレームワーク、`node` の React/Vue/Next/TypeScript 判定時はそのフレームワークの依存バージョンを表示する。`dotnet` は Unity プロジェクト内では非表示（Unity は自前の `.csproj` を生成するため、そこでは `$unity` を使う） |
 
 どの builtin も共通オプションを2つ受け付ける。
 
@@ -130,7 +131,7 @@ stdout の1行目がセグメントになる。空出力は非表示を意味す
 ## グローバルオプション
 
 ```toml
-command_timeout = 250    # 全モジュール共通の実時間予算（ms）
+command_timeout = 500    # 全モジュール共通の実時間予算（ms）
 ```
 
 環境変数 `NO_COLOR` を設定するとすべての装飾が消える。

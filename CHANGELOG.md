@@ -8,6 +8,9 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `package` module (starship-style): the project's own declared version,
+  from the `version` field of `Cargo.toml`, `package.json`,
+  `pyproject.toml`, `composer.json`, or `pom.xml` — first match wins
 - Five new builtin modules surfacing previously-unused stdin fields: `cost`
   (session spend in USD), `lines` (session lines added/removed), `agent`
   (active subagent name), `pr` (open PR number + review state), `worktree`
@@ -17,6 +20,19 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Language modules now show the *toolchain* version obtained from the real
+  binary (`rustc --version`, `go version`, `node --version`,
+  `python3 --version`, `ruby --version`, `java --version`,
+  `php --version`), falling back to the previous file-based value
+  (`go.mod` directive, `.python-version`, `.ruby-version`, `pom.xml`
+  property, `composer.json` constraint, `engines.node`) when the binary
+  isn't available. `rust` previously showed the crate's own `Cargo.toml`
+  version — that now lives in `$package`. `unity` (editor version),
+  `dotnet` (target framework), and `node`'s framework variants
+  (dependency version) are intentional exceptions
+- Default `command_timeout` raised from 250 ms to 500 ms, matching
+  starship's default command budget, since language modules now spawn
+  toolchain processes
 - **Breaking:** the `project` module is replaced by eleven independent
   per-language modules — `unity`, `node`, `rust`, `go`, `python`, `dotnet`,
   `ruby`, `java`, `kotlin`, `php`, `swift` — each with its own `disabled`/

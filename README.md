@@ -72,7 +72,8 @@ See [docs/configuration.md](docs/configuration.md) for the full configuration re
 | `agent` | Active subagent name | stdin |
 | `pr` | Open PR number, colored by review state | stdin |
 | `worktree` | Worktree name/branch when not the primary checkout | stdin |
-| `unity`, `node`, `rust`, `go`, `python`, `dotnet`, `ruby`, `java`, `kotlin`, `php`, `swift` | Per-language project icon + version, one module per language | marker files |
+| `package` | The project's own declared version (starship-style) | `Cargo.toml` / `package.json` / `pyproject.toml` / `composer.json` / `pom.xml` |
+| `unity`, `node`, `rust`, `go`, `python`, `dotnet`, `ruby`, `java`, `kotlin`, `php`, `swift` | Per-language icon + toolchain version, one module per language | real binaries (`rustc --version`, `go version`, …), falling back to project files |
 
 Every module accepts `disabled = true` and `style = "bold fg:#A6E22E"` (starship-style strings; `[palette]` defines named colors). The language modules detect independently — a repo with both `Cargo.toml` and `package.json` shows both `$rust` and `$node`.
 

@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 
 pub const DEFAULT_FORMAT: &str = "$model $directory $memory $ctx $time $git\n\
-    $unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift\n\
+    $package $unity $node $rust $go $python $dotnet $ruby $java $kotlin $php $swift\n\
     $usage $cost $lines $agent $pr $worktree";
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -31,6 +31,7 @@ pub struct Config {
     pub agent: ModuleOverrides,
     pub pr: ModuleOverrides,
     pub worktree: ModuleOverrides,
+    pub package: ModuleOverrides,
     pub unity: ModuleOverrides,
     pub node: ModuleOverrides,
     pub rust: ModuleOverrides,
@@ -137,6 +138,7 @@ impl Config {
             BuiltinModule::Agent => generic(&self.agent),
             BuiltinModule::Pr => generic(&self.pr),
             BuiltinModule::Worktree => generic(&self.worktree),
+            BuiltinModule::Package => generic(&self.package),
             BuiltinModule::Unity => generic(&self.unity),
             BuiltinModule::Node => generic(&self.node),
             BuiltinModule::Rust => generic(&self.rust),

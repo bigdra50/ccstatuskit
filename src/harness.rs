@@ -13,7 +13,7 @@ use std::time::{Duration, Instant};
 
 const FULL_FIXTURE: &str = include_str!("../tests/fixtures/full.json");
 const HARNESS_CAP: Duration = Duration::from_secs(2);
-const RENDER_BUDGET_MS: u128 = 250;
+const RENDER_BUDGET_MS: u128 = 500;
 
 pub fn run(command: &str) -> i32 {
     println!("Testing module command: {command}");

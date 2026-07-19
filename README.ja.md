@@ -79,7 +79,8 @@ cargo install ccstatuskit          # または GitHub Releases のバイナリ�
 | `agent` | 実行中のサブエージェント名 | stdin |
 | `pr` | オープン中の PR 番号（レビュー状態で色分け） | stdin |
 | `worktree` | 本体以外の worktree で作業中のときの名前とブランチ | stdin |
-| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | 言語ごとのプロジェクトアイコンとバージョン（1言語1モジュール） | マーカーファイル |
+| `package` | プロジェクト自身の宣言バージョン（starship 方式） | `Cargo.toml` / `package.json` / `pyproject.toml` / `composer.json` / `pom.xml` |
+| `unity`、`node`、`rust`、`go`、`python`、`dotnet`、`ruby`、`java`、`kotlin`、`php`、`swift` | 言語ごとのアイコンとツールチェインのバージョン（1言語1モジュール） | 実バイナリ（`rustc --version`、`go version` など）。無ければプロジェクトファイルにフォールバック |
 
 どのモジュールも `disabled = true` と `style = "bold fg:#A6E22E"`（starship 互換の style 文字列）を受け付ける。
 名前付きの色は `[palette]` で定義できる。言語モジュールはそれぞれ独立に判定するため、`Cargo.toml` と `package.json` が両方あるリポジトリでは `$rust` と `$node` が両方表示される。

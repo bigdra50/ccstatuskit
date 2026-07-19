@@ -17,6 +17,7 @@ mod lines;
 mod memory;
 mod model;
 mod node;
+mod package;
 mod php;
 mod pr;
 mod python;
@@ -47,6 +48,7 @@ pub enum BuiltinModule {
     Agent,
     Pr,
     Worktree,
+    Package,
     Unity,
     Node,
     Rust,
@@ -61,7 +63,7 @@ pub enum BuiltinModule {
 }
 
 impl BuiltinModule {
-    pub const ALL: [BuiltinModule; 23] = [
+    pub const ALL: [BuiltinModule; 24] = [
         Self::Model,
         Self::Directory,
         Self::Git,
@@ -74,6 +76,7 @@ impl BuiltinModule {
         Self::Agent,
         Self::Pr,
         Self::Worktree,
+        Self::Package,
         Self::Unity,
         Self::Node,
         Self::Rust,
@@ -101,6 +104,7 @@ impl BuiltinModule {
             Self::Agent => "agent",
             Self::Pr => "pr",
             Self::Worktree => "worktree",
+            Self::Package => "package",
             Self::Unity => "unity",
             Self::Node => "node",
             Self::Rust => "rust",
@@ -129,6 +133,7 @@ impl BuiltinModule {
             "agent" => Self::Agent,
             "pr" => Self::Pr,
             "worktree" => Self::Worktree,
+            "package" => Self::Package,
             "unity" => Self::Unity,
             "node" => Self::Node,
             "rust" => Self::Rust,
@@ -169,6 +174,7 @@ impl BuiltinModule {
             Self::Agent => agent::render(context, probes),
             Self::Pr => pr::render(context, probes),
             Self::Worktree => worktree::render(context, probes),
+            Self::Package => package::render(context, probes),
             Self::Unity => unity::render(context, probes),
             Self::Node => node::render(context, probes),
             Self::Rust => rust_lang::render(context, probes),
