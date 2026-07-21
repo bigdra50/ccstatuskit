@@ -6,6 +6,8 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-07-22
+
 ### Added
 
 - Homebrew (`brew install bigdra50/tap/ccstatuskit`) and Scoop installation
@@ -72,5 +74,6 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
   non-inheritable std handles so children can never hold the statusline pipe
 - Release binaries for Linux (gnu/musl), macOS (x64/arm64), and Windows (msvc)
 
+[0.2.1]: https://github.com/bigdra50/ccstatuskit/releases/tag/v0.2.1
 [0.2.0]: https://github.com/bigdra50/ccstatuskit/releases/tag/v0.2.0
 [0.1.0]: https://github.com/bigdra50/ccstatuskit/releases/tag/v0.1.0
