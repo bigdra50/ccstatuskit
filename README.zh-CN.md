@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml/badge.svg)](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml)
 [![crates.io](https://img.shields.io/crates/v/ccstatuskit.svg)](https://crates.io/crates/ccstatuskit)
+[![Homebrew](https://img.shields.io/github/v/release/bigdra50/ccstatuskit?logo=homebrew&label=homebrew)](#安装)
+[![Scoop](https://img.shields.io/badge/dynamic/json?url=https://github.com/bigdra50/ccstatuskit/releases/latest/download/ccstatuskit.json&query=$.version&logo=scoop&label=scoop)](#安装)
 [![license](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
 [![MSRV](https://img.shields.io/badge/MSRV-1.85-orange.svg)](Cargo.toml)
 
@@ -50,8 +52,21 @@ ccstatuskit 用三个机制拆分这个问题：
 ## 安装
 
 ```sh
-cargo install ccstatuskit          # 或从 GitHub Releases 获取二进制文件
+# macOS / Linux（无需 Rust）
+brew install bigdra50/tap/ccstatuskit
+
+# Windows
+scoop install https://github.com/bigdra50/ccstatuskit/releases/latest/download/ccstatuskit.json
 ```
+
+已安装 Rust 时:
+
+```sh
+cargo install ccstatuskit
+```
+
+所有支持目标平台的预构建包见 [GitHub Releases](https://github.com/bigdra50/ccstatuskit/releases)。
+可用附带的 `SHA256SUMS` 校验下载。
 
 然后在 `~/.claude/settings.json` 中注册：
 

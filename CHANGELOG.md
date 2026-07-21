@@ -8,6 +8,9 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Homebrew (`brew install bigdra50/tap/ccstatuskit`) and Scoop installation
+  channels, with release automation that renders packaging manifests and
+  pushes the formula to `bigdra50/homebrew-tap`
 - Five new builtin modules surfacing previously-unused stdin fields: `cost`
   (session spend in USD), `lines` (session lines added/removed), `agent`
   (active subagent name), `pr` (open PR number + review state), `worktree`

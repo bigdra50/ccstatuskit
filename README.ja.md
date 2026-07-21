@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml/badge.svg)](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml)
 [![crates.io](https://img.shields.io/crates/v/ccstatuskit.svg)](https://crates.io/crates/ccstatuskit)
+[![Homebrew](https://img.shields.io/github/v/release/bigdra50/ccstatuskit?logo=homebrew&label=homebrew)](#インストール)
+[![Scoop](https://img.shields.io/badge/dynamic/json?url=https://github.com/bigdra50/ccstatuskit/releases/latest/download/ccstatuskit.json&query=$.version&logo=scoop&label=scoop)](#インストール)
 [![license](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
 [![MSRV](https://img.shields.io/badge/MSRV-1.85-orange.svg)](Cargo.toml)
 
@@ -50,8 +52,21 @@ ccstatuskit はこの問題を3つの仕組みで分割する。
 ## インストール
 
 ```sh
-cargo install ccstatuskit          # または GitHub Releases のバイナリを取得
+# macOS / Linux（Rust 不要）
+brew install bigdra50/tap/ccstatuskit
+
+# Windows
+scoop install https://github.com/bigdra50/ccstatuskit/releases/latest/download/ccstatuskit.json
 ```
+
+Rust がある場合:
+
+```sh
+cargo install ccstatuskit
+```
+
+対応ターゲット向けのビルド済みアーカイブは [GitHub Releases](https://github.com/bigdra50/ccstatuskit/releases) にもある。
+添付の `SHA256SUMS` でダウンロードを検証できる。
 
 `~/.claude/settings.json` で Claude Code に登録する。
 

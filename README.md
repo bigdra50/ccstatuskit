@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml/badge.svg)](https://github.com/bigdra50/ccstatuskit/actions/workflows/ci.yml)
 [![crates.io](https://img.shields.io/crates/v/ccstatuskit.svg)](https://crates.io/crates/ccstatuskit)
+[![Homebrew](https://img.shields.io/github/v/release/bigdra50/ccstatuskit?logo=homebrew&label=homebrew)](#install)
+[![Scoop](https://img.shields.io/badge/dynamic/json?url=https://github.com/bigdra50/ccstatuskit/releases/latest/download/ccstatuskit.json&query=$.version&logo=scoop&label=scoop)](#install)
 [![license](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
 [![MSRV](https://img.shields.io/badge/MSRV-1.85-orange.svg)](Cargo.toml)
 
@@ -43,8 +45,21 @@ Rows are declared as template lines, not absolute positions: modules that hide c
 ## Install
 
 ```sh
-cargo install ccstatuskit          # or grab a binary from GitHub Releases
+# macOS or Linux (no Rust required)
+brew install bigdra50/tap/ccstatuskit
+
+# Windows
+scoop install https://github.com/bigdra50/ccstatuskit/releases/latest/download/ccstatuskit.json
 ```
+
+With Rust installed:
+
+```sh
+cargo install ccstatuskit
+```
+
+Pre-built archives for all supported targets are also on [GitHub Releases](https://github.com/bigdra50/ccstatuskit/releases).
+Verify downloads with the attached `SHA256SUMS` file.
 
 Then point Claude Code at it in `~/.claude/settings.json`:
 

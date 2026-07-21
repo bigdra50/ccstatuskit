@@ -1,0 +1,24 @@
+{
+  "_comment": "Release automation renders the version and Windows SHA256 placeholders and attaches this manifest to each GitHub Release. The Scoop install URL points at releases/latest/download/ccstatuskit.json, so no copy-back to this file is required.",
+  "version": "__VERSION__",
+  "description": "Modular statusline kit for Claude Code",
+  "homepage": "https://github.com/bigdra50/ccstatuskit",
+  "license": "MIT OR Apache-2.0",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/bigdra50/ccstatuskit/releases/download/v__VERSION__/ccstatuskit-x86_64-pc-windows-msvc.zip",
+      "hash": "__WIN_X64_SHA256__"
+    }
+  },
+  "bin": "ccstatuskit.exe",
+  "checkver": {
+    "github": "https://github.com/bigdra50/ccstatuskit"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/bigdra50/ccstatuskit/releases/download/v$version/ccstatuskit-x86_64-pc-windows-msvc.zip"
+      }
+    }
+  }
+}
